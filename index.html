@@ -765,88 +765,67 @@ async function doRegister(){
     });
   }
 
-  const { error } = await supabaseClient
-    .from('users')
-    .insert({
-      first_name: document.getElementById('rg-fname').value.trim(),
-      last_name: document.getElementById('rg-lname').value.trim(),
-      iin: document.getElementById('rg-iin').value.trim(),
-      phone: phone,
-      email: document.getElementById('rg-email').value.trim() || null,
-      brand: document.getElementById('rg-brand').value.trim(),
-      model: document.getElementById('rg-model').value.trim(),
-      plate: document.getElementById('rg-plate').value.trim(),
-      vin: document.getElementById('rg-vin').value.trim()
-    });
-
-  if(error){
-    console.error(error);
-
-    if(error.code === '23505'){
-      toast(T('err_phone'));
-    } else {
-      toast('Ошибка регистрации. Попробуйте ещё раз.');
-    }
-
-    return;
-  }
-
-  DB.set('byi2_session', {phone});
-  go('s-reg-success');
-}
-  const phone=document.getElementById('rg-phone').value.trim();
-  if(users().find(u=>u.phone===phone)){ toast(T('err_phone')); return; }
-  const trailers=[];
-  if(hasTrailer) trailers.push({type:parseInt(document.getElementById('rg-tr-type').value||'0'),brand:document.getElementById('rg-tr-brand').value.trim(),plate:document.getElementById('rg-tr-plate').value.trim(),vin:document.getElementById('rg-tr-vin').value.trim()});
-  const u={
-    firstName:document.getElementById('rg-fname').value.trim(),
-    lastName:document.getElementById('rg-lname').value.trim(),
-    iin:document.getElementById('rg-iin').value.trim(),
-    phone,
-    email:document.getElementById('rg-email').value.trim(),
-    password:document.getElementById('rg-pass').value,
-    balance:0, blocked:false,
-    vehicles:[{brand:document.getElementById('rg-brand').value.trim(),model:document.getElementById('rg-model').value.trim(),plate:document.getElementById('rg-plate').value.trim(),vin:document.getElementById('rg-vin').value.trim(),trailers}],
-    created:new Date().toISOString()
-  };
-  updateUser(u);
-  DB.set('byi2_session',{phone});
-  go('s-reg-success');
-}
-function doLogin(){
- async function doRegister(){
-  const phone = document.getElementById('rg-phone').value.trim();
+  const firstName = document.getElementById('rg-fname').value.trim();
+  const lastName = document.getElementById('rg-lname').value.trim();
+  const iin = document.getElementById('rg-iin').value.trim();
+  const email = document.getElementById('rg-email').value.trim();
+  const password = document.getElementById('rg-pass').value;
+  const brand = document.getElementById('rg-brand').value.trim();
+  const model = document.getElementById('rg-model').value.trim();
+  const plate = document.getElementById('rg-plate').value.trim();
+  const vin = document.getElementById('rg-vin').value.trim();
 
   const { error } = await supabaseClient
     .from('users')
     .insert({
-      first_name: document.getElementById('rg-fname').value.trim(),
-      last_name: document.getElementById('rg-lname').value.trim(),
-      iin: document.getElementById('rg-iin').value.trim(),
+      first_name: firstName,
+      last_name: lastName,
+      iin: iin,
       phone: phone,
-      email: document.getElementById('rg-email').value.trim() || null,
-      brand: document.getElementById('rg-brand').value.trim(),
-      model: document.getElementById('rg-model').value.trim(),
-      plate: document.getElementById('rg-plate').value.trim(),
-      vin: document.getElementById('rg-vin').value.trim()
+      email: email || null,
+      brand: brand,
+      model: model,
+      plate: plate,
+      vin: vin
     });
 
   if(error){
     console.error(error);
-
     if(error.code === '23505'){
       toast(T('err_phone'));
-    } else {
+    }else{
       toast('Ошибка регистрации: ' + error.message);
     }
-
     return;
   }
+
+  const user = {
+    firstName: firstName,
+    lastName: lastName,
+    iin: iin,
+    phone: phone,
+    email: email,
+    password: password,
+    balance: 0,
+    blocked: false,
+    vehicles: [{
+      brand: brand,
+      model: model,
+      plate: plate,
+      vin: vin,
+      trailers: trailers
+    }],
+    created: new Date().toISOString()
+  };
+
+  const allUsers = users();
+  allUsers.push(user);
+  saveUsers(allUsers);
 
   DB.set('byi2_session', {phone});
   go('s-reg-success');
 }
-  
+
 function doLogin(){
   const phone = document.getElementById('li-phone').value.trim();
   const pass = document.getElementById('li-pass').value;
@@ -868,8 +847,19 @@ function doLogin(){
 }
 
 function forgotPass(){
-function forgotPass(){ toast(T('forgot_text')+': '+settings().supportPhone); }
-function confirmLogout(){ askConfirm(T('logout'),T('confirm_logout'),()=>{ localStorage.removeItem('byi2_session'); go('s-welcome'); }); }
+  toast(T('forgot_text') + ': ' + settings().supportPhone);
+}
+
+function confirmLogout(){
+  askConfirm(
+    T('logout'),
+    T('confirm_logout'),
+    ()=>{
+      localStorage.removeItem('byi2_session');
+      go('s-welcome');
+    }
+  );
+}
 
 /* ==================== RENDER ==================== */
 function renderAll(){
