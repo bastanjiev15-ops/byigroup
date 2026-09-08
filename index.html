@@ -752,7 +752,48 @@ function regStep(d){
   regStepN=Math.min(3,Math.max(1,regStepN+d));
   showRegStep();
 }
-function doRegister(){
+async function doRegister(){
+  const phone = document.getElementById('rg-phone').value.trim();
+
+  const trailers = [];
+  if(hasTrailer){
+    trailers.push({
+      type: parseInt(document.getElementById('rg-tr-type').value || '0'),
+      brand: document.getElementById('rg-tr-brand').value.trim(),
+      plate: document.getElementById('rg-tr-plate').value.trim(),
+      vin: document.getElementById('rg-tr-vin').value.trim()
+    });
+  }
+
+  const { error } = await supabaseClient
+    .from('users')
+    .insert({
+      first_name: document.getElementById('rg-fname').value.trim(),
+      last_name: document.getElementById('rg-lname').value.trim(),
+      iin: document.getElementById('rg-iin').value.trim(),
+      phone: phone,
+      email: document.getElementById('rg-email').value.trim() || null,
+      brand: document.getElementById('rg-brand').value.trim(),
+      model: document.getElementById('rg-model').value.trim(),
+      plate: document.getElementById('rg-plate').value.trim(),
+      vin: document.getElementById('rg-vin').value.trim()
+    });
+
+  if(error){
+    console.error(error);
+
+    if(error.code === '23505'){
+      toast(T('err_phone'));
+    } else {
+      toast('Ошибка регистрации. Попробуйте ещё раз.');
+    }
+
+    return;
+  }
+
+  DB.set('byi2_session', {phone});
+  go('s-reg-success');
+}
   const phone=document.getElementById('rg-phone').value.trim();
   if(users().find(u=>u.phone===phone)){ toast(T('err_phone')); return; }
   const trailers=[];
