@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BYIGROUP ADMIN</title>
+<link rel="icon" href="icon-192.png">
+<style>
+:root{--navy:#0f2a5c;--navy2:#1e40af;--bg:#f4f6fa;--card:#fff;--text:#0f172a;--text2:#64748b;--line:#e6eaf2;--green:#16a34a;--red:#dc2626;--amber:#d97706;--r:14px;--sh:0 2px 12px rgba(15,42,92,.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 40px}
+.card{background:var(--card);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:14px}
+h1{font-size:22px}h2{font-size:17px;margin-bottom:14px}
+.muted{color:var(--text2);font-size:13px}
+.btn{display:inline-block;padding:11px 20px;background:var(--navy);color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none}
+.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.ghost{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+.btn.sm{padding:7px 13px;font-size:12.5px;border-radius:9px}
+.btn:active{transform:scale(.97)}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;padding:11px 13px;border:2px solid var(--line);border-radius:11px;font-size:15px;outline:none;font-family:inherit}
+.field input:focus,.field select:focus{border-color:var(--navy2)}
+.row{display:flex;gap:10px;align-items:center}.between{justify-content:space-between}.flex1{flex:1;min-width:0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.tabs button{padding:10px 16px;border:none;border-radius:11px;background:#e6eaf2;font-weight:700;font-size:13px;color:var(--text2);cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--navy);color:#fff}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px 8px;text-align:left;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle}
+th{background:#f8fafc;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.badge{display:inline-block;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.st-new{background:#fef3c7;color:#92400e}.st-accepted{background:#dbeafe;color:#1d4ed8}.st-processing{background:#ffedd5;color:#c2410c}.st-ready{background:#ede9fe;color:#6d28d9}.st-done{background:#dcfce7;color:#166534}.st-cancelled{background:#fee2e2;color:#b91c1c}.st-pending{background:#fef9c3;color:#854d0e}
+.lock{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0b1220,#0f2a5c)}
+.lock .card{width:100%;max-width:380px;text-align:center}
+.lock .mark{width:64px;height:64px;background:var(--navy);border-radius:16px;color:#fff;font-weight:900;font-size:22px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-90px);background:#0f172a;color:#fff;padding:12px 22px;border-radius:12px;font-weight:600;z-index:99;transition:.3s;font-size:14px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.stat{background:linear-gradient(135deg,#0f2a5c,#1e40af);color:#fff;border-radius:var(--r);padding:18px;flex:1;min-width:150px}
+.stat .n{font-size:26px;font-weight:800}.stat .l{opacity:.8;font-size:12px;margin-top:2px}
+.grid{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.svc-edit{border:2px solid var(--line);border-radius:13px;padding:14px;margin-bottom:12px}
+.svc-edit.open{border-color:var(--navy)}
+.hidden{display:none!important}
+.chart{display:flex;align-items:flex-end;gap:8px;height:140px;padding-top:10px}
+.chart .bar{flex:1;background:linear-gradient(180deg,#1e40af,#0f2a5c);border-radius:6px 6px 0 0;min-height:4px;position:relative;cursor:default}
+.chart .bar:hover{opacity:.85}
+.chart .bar span{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--text)}
+.chart-lbl{display:flex;gap:8px;margin-top:6px}
+.chart-lbl div{flex:1;text-align:center;font-size:10.5px;color:var(--text2)}
+.modal-b{position:fixed;inset:0;background:rgba(11,18,32,.55);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-b.show{display:flex}
+.modal-c{background:#fff;border-radius:18px;padding:22px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kv:last-child{border:none}
+.kv .k{color:var(--text2)}
+.kv .v{font-weight:700;text-align:right}
+select.st-sel{padding:7px 10px;border-radius:9px;border:2px solid var(--line);font-weight:600;font-size:12.5px}
+@media(max-width:720px){
+  th,td{padding:9px 5px;font-size:12px}
+  .stat{min-width:calc(50% - 6px)}
+  .desktop-only{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LOCK -->
+<div class="lock" id="lock">
+  <div class="card">
+    <div class="mark">BYI</div>
+    <h1>BYIGROUP ADMIN</h1>
+    <p class="muted" style="margin:8px 0 18px">Доступ только для SUPER ADMIN</p>
+    <div class="field"><input type="password" id="adm-pass" placeholder="Пароль администратора" onkeydown="if(event.key==='Enter')unlock()"></div>
+    <button class="btn" style="width:100%" onclick="unlock()">Войти</button>
+    <p class="muted" style="margin-top:14px">Пароль по умолчанию: <b>byi2024</b><br>Смените его в «Настройки → Безопасность»</p>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div class="wrap hidden" id="panel">
+  <div class="row between" style="margin-bottom:18px">
+    <div><h1>👑 BYIGROUP ADMIN</h1><div class="muted" id="adm-date"></div></div>
+    <button class="btn red sm" onclick="lockPanel()">Выйти</button>
+  </div>
+
+  <div class="tabs">
+    <button class="on" onclick="tab('dashboard',this)">📊 Дашборд</button>
+    <button onclick="tab('clients',this)">👤 Клиенты</button>
+    <button onclick="tab('orders',this)">🗂 Заказы</button>
+    <button onclick="tab('services',this)">🛠 Услуги</button>
+    <button onclick="tab('payments',this)">💰 Пополнения <span id="pay-cnt"></span></button>
+    <button onclick="tab('settings',this)">⚙️ Настройки</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="t-dashboard">
+    <div class="grid" id="stats"></div>
+    <div class="card">
+      <h2>Заказы за 7 дней</h2>
+      <div class="chart" id="chart"></div>
+      <div class="chart-lbl" id="chart-lbl"></div>
+    </div>
+    <div class="card">
+      <h2>Последние заказы</h2>
+      <div id="recent-orders"></div>
+    </div>
+    <div class="card">
+      <h2>Последние пополнения</h2>
+      <div id="recent-pays"></div>
+    </div>
+  </div>
+
+  <!-- CLIENTS -->
+  <div id="t-clients" class="hidden">
+    <div class="card">
+      <div class="row between mb16" style="flex-wrap:wrap">
+        <h2 style="margin:0">Клиенты</h2>
+        <input id="cl-search" placeholder="🔍 Поиск: имя, телефон, ИИН" oninput="renderClients()" style="padding:10px 14px;border:2px solid var(--line);border-radius:11px;font-size:14px;min-width:220px">
+      </div>
+      <div id="clients-list" style="overflow-x:auto"></div>
+    </div>
+  </div>
+
+  <!-- ORDERS -->
+  <div id="t-orders" class="hidden">
+    <div class="card">
+      <h2>Все заказы</h2>
+      <div class="tabs" id="ord-tabs">
+        <button class="on" onclick="ordF='all';renderOrdersAdm();markTab(this)">Все</button>
+        <button onclick="ordF='new';renderOrdersAdm();markTab(this)">🟡 Новые</button>
+        <button onclick="ordF='processing';renderOrdersAdm();markTab(this)">🟠 В обработке</button>
+        <button onclick="ordF='done';renderOrdersAdm();markTab(this)">🟢 Завершённые</button>
+        <button onclick="ordF='cancelled';renderOrdersAdm();markTab(this)">🔴 Отменённые</button>
+      </div>
+      <div id="orders-adm" style="overflow-x:auto"></div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <div id="t-services" class="hidden">
+    <div class="card">
+      <div class="row between mb16"><h2 style="margin:0">Услуги — полное управление</h2>
+      <button class="btn green sm" onclick="addService()">+ Добавить услугу</button></div>
+      <div id="svc-admin-list"></div>
+    </div>
+  </div>
+
+  <!-- PAYMENTS -->
+  <div id="t-payments" class="hidden">
+    <div class="card">
+      <h2>Пополнения баланса</h2>
+      <div id="payments-list" style="overflow-x:auto"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="t-settings" class="hidden">
+    <div class="card">
+      <h2>🏢 Компания</h2>
+      <div class="field"><label>Название компании</label><input id="set-company"></div>
+    </div>
+    <div class="card">
+      <h2>💳 Платёжные реквизиты (видят клиенты)</h2>
+      <div class="field"><label>Номер Kaspi Gold</label><input id="set-kaspi"></div>
+    </div>
+    <div class="card">
+      <h2>📞 Поддержка</h2>
+      <div class="field"><label>Телефон поддержки</label><input id="set-support"></div>
+      <div class="field"><label>WhatsApp (только цифры)</label><input id="set-wa"></div>
+      <div class="field"><label>Telegram (username, необязательно)</label><input id="set-tg" placeholder="@byigroup"></div>
+      <div class="field"><label>Email</label><input id="set-email"></div>
+    </div>
+    <div class="card">
+      <h2>📅 Рабочие дни</h2>
+      <div class="row">
+        <div class="field flex1"><label>Рабочие дни (RU)</label><input id="set-wd-ru"></div>
+        <div class="field flex1"><label>Выходные (RU)</label><input id="set-do-ru"></div>
+      </div>
+      <div class="field"><label>Срок обработки по умолчанию (дней)</label><input id="set-days"></div>
+    </div>
+    <button class="btn" onclick="saveAllSettings()">💾 Сохранить все настройки</button>
+
+    <div class="card mt16">
+      <h2>🔒 Безопасность</h2>
+      <div class="field"><label>Текущий пароль</label><input type="password" id="sec-old"></div>
+      <div class="field"><label>Новый пароль</label><input type="password" id="sec-new"></div>
+      <button class="btn" onclick="changePass()">Сменить пароль</button>
+    </div>
+    <div class="card">
+      <h2>🔗 Секретный адрес панели</h2>
+      <p class="muted">Никому не сообщайте этот адрес:</p>
+      <div class="card" style="background:#f8fafc;margin:10px 0 0"><b id="admin-url"></b></div>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENT MODAL -->
+<div class="modal-b" id="client-modal">
+  <div class="modal-c" id="client-modal-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== общее хранилище с клиентским приложением (ключи byi2_*) ===== */
+const DB={get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}},set(k,v){localStorage.setItem(k,JSON.stringify(v));}};
+function settings(){return DB.get('byi2_settings',null);}
+function saveSettings(s){DB.set('byi2_settings',s);}
+function users(){return DB.get('byi2_users',[]);}
+function saveUsers(u){DB.set('byi2_users',u);}
+function orders(){return DB.get('byi2_orders',[]);}
+function saveOrders(o){DB.set('byi2_orders',o);}
+function txs(){return DB.get('byi2_tx',[]);}
+function saveTxs(t){DB.set('byi2_tx',t);}
+function payments(){return DB.get('byi2_payments',[]);}
+function savePayments(p){DB.set('byi2_payments',p);}
+function fmt(n){return (n||0).toLocaleString('ru-RU')+' ₸';}
+function fmtDT(d){return new Date(d).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),2400);}
+const ST={new:'Новый',accepted:'Принят',processing:'В обработке',ready:'Документы готовы',done:'Завершён',cancelled:'Отменён'};
+function stBadge(st){return `<span class="badge st-${st}">${ST[st]||st}</span>`;}
+
+/* ===== AUTH ===== */
+function admPass(){return localStorage.getItem('byi2_admin_pass')||'byi2024';}
+function unlock(){
+  if(document.getElementById('adm-pass').value===admPass()){
+    sessionStorage.setItem('byi2_admin_ok','1'); showPanel();
+  } else toast('Неверный пароль');
+}
+function lockPanel(){sessionStorage.removeItem('byi2_admin_ok');location.reload();}
+function showPanel(){
+  document.getElementById('lock').classList.add('hidden');
+  document.getElementById('panel').classList.remove('hidden');
+  document.getElementById('adm-date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('admin-url').textContent=location.origin+location.pathname;
+  fillSettings(); renderAll();
+}
+function changePass(){
+  if(document.getElementById('sec-old').value!==admPass()){toast('Текущий пароль неверен');return;}
+  const n=document.getElementById('sec-new').value;
+  if(n.length<4){toast('Минимум 4 символа');return;}
+  localStorage.setItem('byi2_admin_pass',n);
+  document.getElementById('sec-old').value='';document.getElementById('sec-new').value='';
+  toast('✓ Пароль изменён');
+}
+function tab(t,btn){
+  ['dashboard','clients','orders','services','payments','settings'].forEach(x=>document.getElementById('t-'+x).classList.toggle('hidden',x!==t));
+  document.querySelectorAll('.tabs>button').forEach(b=>b.classList.toggle('on',b===btn));
+  if(t==='clients')renderClients();
+  if(t==='orders')renderOrdersAdm();
+}
+function markTab(b){document.querySelectorAll('#ord-tabs button').forEach(x=>x.classList.toggle('on',x===b));}
+
+/* ===== RENDER ALL ===== */
+function renderAll(){
+  const us=users(),os=orders(),ps=payments(),tx=txs();
+  const revenue=tx.filter(t=>t.type==='pay').reduce((a,t)=>a+Math.abs(t.amount),0);
+  const pend=ps.filter(p=>p.status==='pending').length;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="n">${us.length}</div><div class="l">Всего клиентов</div></div>
+    <div class="stat"><div class="n">${os.filter(o=>o.status==='new'||o.status==='accepted').length}</div><div class="l">Новые заказы</div></div>
+    <div class="stat"><div class="n">${os.filter(o=>['processing','ready'].includes(o.status)).length}</div><div class="l">В обработке</div></div>
+    <div class="stat"><div class="n">${os.filter(o=>o.status==='done').length}</div><div class="l">Завершено</div></div>
+    <div class="stat"><div class="n">${pend}</div><div class="l">Пополнений ждут</div></div>
+    <div class="stat"><div class="n">${fmt(revenue)}</div><div class="l">Общий оборот</div></div>`;
+  document.getElementById('pay-cnt').textContent=pend?`(${pend})`:'';
+  renderChart(os);
+  renderRecent(os,ps);
+  renderServicesAdm(); renderPayments();
+}
+function renderChart(os){
+  const days=[],counts=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const key=d.toDateString();
+    days.push(d.toLocaleDateString('ru-RU',{weekday:'short'}));
+    counts.push(os.filter(o=>new Date(o.created).toDateString()===key).length);
+  }
+  const max=Math.max(...counts,1);
+  document.getElementById('chart').innerHTML=counts.map(c=>`<div class="bar" style="height:${Math.max(c/max*100,3)}%"><span>${c||''}</span></div>`).join('');
+  document.getElementById('chart-lbl').innerHTML=days.map(d=>`<div>${d}</div>`).join('');
+}
+function renderRecent(os,ps){
+  document.getElementById('recent-orders').innerHTML=os.slice(0,5).length
+    ? '<table>'+os.slice(0,5).map(o=>`<tr><td><b>${o.num}</b></td><td>${o.userName||o.userPhone}</td><td>${(o.svcName&&o.svcName.ru)||''}</td><td>${fmt(o.price)}</td><td>${stBadge(o.status)}</td></tr>`).join('')+'</table>'
+    : '<p class="muted">Заказов пока нет</p>';
+  document.getElementById('recent-pays').innerHTML=ps.slice(0,5).length
+    ? '<table>'+ps.slice(0,5).map(p=>`<tr><td><b>${p.id}</b></td><td>${p.userName}</td><td>${fmt(p.amount)}</td><td>${payBadge(p.status)}</td></tr>`).join('')+'</table>'
+    : '<p class="muted">Пополнений пока нет</p>';
+}
+function payBadge(s){return s==='pending'?'<span class="badge st-pending">🟡 Ожидает</span>':s==='ok'?'<span class="badge st-done">🟢 Подтверждено</span>':'<span class="badge st-cancelled">🔴 Отклонено</span>';}
+
+/* ===== CLIENTS ===== */
+function renderClients(){
+  const q=(document.getElementById('cl-search').value||'').toLowerCase();
+  let us=users();
+  if(q) us=us.filter(u=>(u.firstName+' '+u.lastName+' '+u.phone+' '+u.iin).toLowerCase().includes(q));
+  const box=document.getElementById('clients-list');
+  if(!us.length){box.innerHTML='<p class="muted">Клиентов пока нет</p>';return;}
+  let html='<table><tr><th>Клиент</th><th>Телефон</th><th class="desktop-only">ИИН</th><th>Автомобиль</th><th>Баланс</th><th class="desktop-only">Регистрация</th><th>Статус</th><th></th></tr>';
+  us.forEach(u=>{
+    const i=users().findIndex(x=>x.phone===u.phone);
+    const veh=(u.vehicles&&u.vehicles[0])?u.vehicles[0].brand+' '+u.vehicles[0].plate:'—';
+    html+=`<tr>
+      <td><b>${u.firstName} ${u.lastName||''}</b></td><td>${u.phone}</td>
+      <td class="desktop-only">${u.iin}</td><td>${veh}</td>
+      <td><b>${fmt(u.balance)}</b></td>
+      <td class="desktop-only">${new Date(u.created).toLocaleDateString('ru-RU')}</td>
+      <td>${u.blocked?'<span class="badge st-cancelled">Заблокирован</span>':'<span class="badge st-done">Активен</span>'}</td>
+      <td style="white-space:nowrap"><button class="btn sm ghost" onclick="openClient(${i})">Открыть</button>
+      <button class="btn sm ${u.blocked?'green':'red'}" onclick="toggleBlock(${i})">${u.blocked?'Разблок.':'Блок'}</button></td></tr>`;
+  });
+  box.innerHTML=html+'</table>';
+}
+function openClient(i){
+  const u=users()[i];
+  const myOrders=orders().filter(o=>o.userPhone===u.phone);
+  const myTx=txs().filter(t=>t.userPhone===u.phone);
+  let vehHtml='';
+  (u.vehicles||[]).forEach(v=>{
+    vehHtml+=`<div class="card" style="background:#f8fafc;margin:8px 0;padding:12px">🚛 <b>${v.brand} ${v.model}</b> • ${v.plate}${v.vin?` • VIN: ${v.vin}`:''}
+    ${(v.trailers||[]).map(t=>`<div class="muted">🚚 ${t.brand} • ${t.plate}</div>`).join('')}</div>`;
+  });
+  document.getElementById('client-modal-body').innerHTML=`
+    <div class="row between mb16"><h2 style="margin:0">👤 ${u.firstName} ${u.lastName||''}</h2>
+    <button class="btn sm ghost" onclick="closeClient()">✕</button></div>
+    <div class="kv"><span class="k">Телефон</span><span class="v">${u.phone}</span></div>
+    <div class="kv"><span class="k">ИИН</span><span class="v">${u.iin}</span></div>
+    <div class="kv"><span class="k">Email</span><span class="v">${u.email||'—'}</span></div>
+    <div class="kv"><span class="k">Регистрация</span><span class="v">${new Date(u.created).toLocaleString('ru-RU')}</span></div>
+    <div class="kv"><span class="k">Баланс</span><span class="v" style="color:var(--navy)">${fmt(u.balance)}</span></div>
+    <div class="row mt16">
+      <button class="btn sm flex1" onclick="editBalance(${i})">💰 Изменить баланс</button>
+      <button class="btn sm ghost flex1" onclick="editClient(${i})">✏️ Редактировать</button>
+    </div>
+    <h2 class="mt16">Автомобили (${(u.vehicles||[]).length})</h2>
+    ${vehHtml||'<p class="muted">Нет автомобилей</p>'}
+    <h2>Заказы (${myOrders.length})</h2>
+    ${myOrders.length?'<table>'+myOrders.map(o=>`<tr><td><b>${o.num}</b></td><td>${(o.svcName&&o.svcName.ru)||''}</td><td>${fmt(o.price)}</td><td>${stBadge(o.status)}</td></tr>`).join('')+'</table>':'<p class="muted">Нет заказов</p>'}
+    <h2>История операций (${myTx.length})</h2>
+    ${myTx.length?'<table>'+myTx.slice(0,10).map(t=>`<tr><td>${t.type==='topup'?'💰 Пополнение':t.svc||'Оплата'}</td><td>${fmtDT(t.date)}</td><td style="color:${t.amount>0?'var(--green)':'var(--red)'};font-weight:700">${t.amount>0?'+':''}${fmt(t.amount)}</td></tr>`).join('')+'</table>':'<p class="muted">Нет операций</p>'}`;
+  document.getElementById('client-modal').classList.add('show');
+}
+function closeClient(){document.getElementById('client-modal').classList.remove('show');}
+function toggleBlock(i){
+  const us=users(); us[i].blocked=!us[i].blocked; saveUsers(us);
+  renderClients(); renderAll(); toast(us[i].blocked?'Клиент заблокирован':'Клиент разблокирован');
+}
+function editBalance(i){
+  const us=users();
+  const val=prompt('Новый баланс для '+us[i].firstName+' (₸):', us[i].balance||0);
+  if(val===null)return;
+  const nb=parseInt(val)||0;
+  const diff=nb-(us[i].balance||0);
+  us[i].balance=nb; saveUsers(us);
+  if(diff!==0){const tx=txs();tx.unshift({type:'topup',amount:diff,date:new Date().toISOString(),id:'ADMIN',userPhone:us[i].phone,note:'Корректировка администратором'});saveTxs(tx);}
+  openClient(i); renderAll(); toast('✓ Баланс обновлён');
+}
+function editClient(i){
+  const us=users();
+  const fn=prompt('Имя:',us[i].firstName); if(fn===null)return;
+  const ln=prompt('Фамилия:',us[i].lastName||''); if(ln===null)return;
+  us[i].firstName=fn.trim()||us[i].firstName; us[i].lastName=ln.trim();
+  saveUsers(us); openClient(i); renderClients(); toast('✓ Сохранено');
+}
+
+/* ===== ORDERS ADMIN ===== */
+let ordF='all';
+function renderOrdersAdm(){
+  let os=orders();
+  if(ordF==='new') os=os.filter(o=>o.status==='new'||o.status==='accepted');
+  else if(ordF==='processing') os=os.filter(o=>o.status==='processing'||o.status==='ready');
+  else if(ordF!=='all') os=os.filter(o=>o.status===ordF);
+  const box=document.getElementById('orders-adm');
+  if(!os.length){box.innerHTML='<p class="muted">Заказов нет</p>';return;}
+  let html='<table><tr><th>№</th><th>Клиент</th><th>Услуга</th><th class="desktop-only">Авто</th><th>Цена</th><th class="desktop-only">Дата</th><th>Статус</th></tr>';
+  os.forEach(o=>{
+    const i=orders().findIndex(x=>x.num===o.num);
+    html+=`<tr><td><b>${o.num}</b></td><td>${o.userName||''}<br><span class="muted">${o.userPhone}</span></td>
+    <td>${o.svcIcon||''} ${(o.svcName&&o.svcName.ru)||''}</td>
+    <td class="desktop-only">${o.vehicle||'—'}</td><td><b>${fmt(o.price)}</b></td>
+    <td class="desktop-only">${fmtDT(o.created)}</td>
+    <td><select class="st-sel" onchange="setOrderStatus(${i},this.value)">
+      ${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}
+    </select></td></tr>`;
+  });
+  box.innerHTML=html+'</table>';
+}
+function setOrderStatus(i,st){
+  const os=orders();
+  os[i].status=st;
+  os[i].history=os[i].history||[];
+  os[i].history.push({status:st,date:new Date().toISOString()});
+  saveOrders(os);
+  /* возврат средств при отмене */
+  if(st==='cancelled'){
+    const us=users(); const ui=us.findIndex(u=>u.phone===os[i].userPhone);
+    if(ui>=0){ us[ui].balance=(us[ui].balance||0)+os[i].price; saveUsers(us);
+      const tx=txs(); tx.unshift({type:'topup',amount:os[i].price,date:new Date().toISOString(),id:os[i].num+' ↩',userPhone:os[i].userPhone,note:'Возврат за отменённый заказ'}); saveTxs(tx);
+    }
+    toast('✓ Заказ отменён, средства возвращены клиенту');
+  } else toast('✓ Статус: '+ST[st]);
+  renderAll(); renderOrdersAdm();
+}
+
+/* ===== SERVICES ADMIN ===== */
+function renderServicesAdm(){
+  const s=settings(); if(!s) return;
+  const box=document.getElementById('svc-admin-list'); box.innerHTML='';
+  s.services.forEach((sv,i)=>{
+    const el=document.createElement('div'); el.className='svc-edit';
+    el.innerHTML=`
+      <div class="row between" style="flex-wrap:wrap;gap:8px">
+        <div class="row"><span style="font-size:24px">${sv.icon}</span><div><b>${sv.name.ru}</b><div class="muted">${fmt(sv.price)} • ${sv.days} дн.</div></div></div>
+        <div class="row">
+          <label style="font-size:12.5px;display:flex;gap:6px;align-items:center;font-weight:600"><input type="checkbox" ${sv.active?'checked':''} onchange="toggleSvc(${i},this.checked)"> Активна</label>
+          <button class="btn sm ghost" onclick="toggleEditSv('${sv.id}')">✏️ Изменить</button>
+          <button class="btn sm red" onclick="delSvc(${i})">🗑</button>
+        </div>
+      </div>
+      <div class="hidden" id="edit-${sv.id}" style="margin-top:14px">
+        <div class="row">
+          <div class="field flex1"><label>Название RU</label><input id="e-nr-${sv.id}" value="${esc(sv.name.ru)}"></div>
+          <div class="field flex1"><label>Название KZ</label><input id="e-nk-${sv.id}" value="${esc(sv.name.kk)}"></div>
+          <div class="field flex1"><label>Название EN</label><input id="e-ne-${sv.id}" value="${esc(sv.name.en)}"></div>
+        </div>
+        <div class="row">
+          <div class="field flex1"><label>Цена (₸)</label><input type="number" id="e-p-${sv.id}" value="${sv.price}"></div>
+          <div class="field flex1"><label>Срок (дней)</label><input id="e-d-${sv.id}" value="${esc(sv.days)}"></div>
+          <div class="field" style="width:96px"><label>Иконка</label><input id="e-i-${sv.id}" value="${sv.icon}"></div>
+        </div>
+        <div class="field"><label>Описание RU</label><input id="e-dr-${sv.id}" value="${esc(sv.desc.ru)}"></div>
+        <div class="row">
+          <div class="field flex1"><label>Описание KZ</label><input id="e-dk-${sv.id}" value="${esc(sv.desc.kk)}"></div>
+          <div class="field flex1"><label>Описание EN</label><input id="e-de-${sv.id}" value="${esc(sv.desc.en)}"></div>
+        </div>
+        <button class="btn green sm" onclick="saveSvc(${i},'${sv.id}')">💾 Сохранить</button>
+      </div>`;
+    box.appendChild(el);
+  });
+}
+function esc(s){return String(s||'').replace(/"/g,'&quot;');}
+function gv(id){return document.getElementById(id).value;}
+function toggleEditSv(id){document.getElementById('edit-'+id).classList.toggle('hidden');}
+function toggleSvc(i,v){const s=settings();s.services[i].active=v;saveSettings(s);toast(v?'✓ Услуга включена':'✓ Услуга выключена');}
+function saveSvc(i,id){
+  const s=settings(); const sv=s.services[i];
+  sv.name={ru:gv('e-nr-'+id),kk:gv('e-nk-'+id),en:gv('e-ne-'+id)};
+  sv.desc={ru:gv('e-dr-'+id),kk:gv('e-dk-'+id),en:gv('e-de-'+id)};
+  sv.price=parseInt(gv('e-p-'+id))||0; sv.days=gv('e-d-'+id); sv.icon=gv('e-i-'+id);
+  saveSettings(s); renderServicesAdm(); toast('✓ Услуга обновлена');
+}
+function delSvc(i){
+  if(!confirm('Удалить услугу «'+settings().services[i].name.ru+'»?'))return;
+  const s=settings(); s.services.splice(i,1); saveSettings(s); renderServicesAdm(); toast('✓ Удалено');
+}
+function addService(){
+  const s=settings();
+  s.services.push({id:'svc'+Date.now(),icon:'📑',name:{ru:'Новая услуга',kk:'Жаңа қызмет',en:'New service'},desc:{ru:'Описание услуги',kk:'Қызмет сипаттамасы',en:'Service description'},price:5000,days:'1-2',active:false});
+  saveSettings(s); renderServicesAdm(); toast('✓ Добавлена (выключена) — отредактируйте и включите');
+}
+
+/* ===== PAYMENTS ===== */
+function renderPayments(){
+  const ps=payments();
+  const box=document.getElementById('payments-list');
+  if(!ps.length){box.innerHTML='<p class="muted">Пополнений пока нет</p>';return;}
+  let html='<table><tr><th>ID</th><th>Клиент</th><th>Сумма</th><th class="desktop-only">Дата</th><th class="desktop-only">Чек</th><th>Статус</th><th></th></tr>';
+  ps.forEach((p,i)=>{
+    html+=`<tr><td><b>${p.id}</b></td><td>${p.userName}<br><span class="muted">${p.userPhone}</span></td>
+    <td><b>${fmt(p.amount)}</b></td><td class="desktop-only">${fmtDT(p.created)}</td>
+    <td class="desktop-only">${p.receiptName?'📎 '+p.receiptName:'—'}${p.comment?'<br><span class="muted">'+p.comment+'</span>':''}</td>
+    <td>${payBadge(p.status)}</td>
+    <td style="white-space:nowrap">${p.status==='pending'?`<button class="btn sm green" onclick="approvePay(${i})">✓ Подтвердить</button> <button class="btn sm red" onclick="rejectPay(${i})">✗</button>`:''}</td></tr>`;
+  });
+  box.innerHTML=html+'</table>';
+}
+function approvePay(i){
+  const ps=payments(); ps[i].status='ok'; ps[i].processedDate=new Date().toISOString(); savePayments(ps);
+  const p=ps[i];
+  const us=users(); const ui=us.findIndex(u=>u.phone===p.userPhone);
+  if(ui>=0){ us[ui].balance=(us[ui].balance||0)+p.amount; saveUsers(us); }
+  const tx=txs(); tx.unshift({type:'topup',amount:p.amount,date:new Date().toISOString(),id:p.id,userPhone:p.userPhone}); saveTxs(tx);
+  renderAll(); toast('✓ Подтверждено: +'+fmt(p.amount)+' → '+p.userName);
+}
+function rejectPay(i){
+  const ps=payments(); ps[i].status='rej'; savePayments(ps);
+  renderAll(); toast('Пополнение отклонено');
+}
+
+/* ===== SETTINGS ===== */
+function fillSettings(){
+  const s=settings(); if(!s)return;
+  document.getElementById('set-company').value=s.companyName||'';
+  document.getElementById('set-kaspi').value=s.kaspiPhone||'';
+  document.getElementById('set-support').value=s.supportPhone||'';
+  document.getElementById('set-wa').value=s.whatsapp||'';
+  document.getElementById('set-tg').value=s.telegram||'';
+  document.getElementById('set-email').value=s.email||'';
+  document.getElementById('set-wd-ru').value=(s.workDays&&s.workDays.ru)||'';
+  document.getElementById('set-do-ru').value=(s.daysOff&&s.daysOff.ru)||'';
+  document.getElementById('set-days').value=s.defaultDays||'1-2';
+}
+function saveAllSettings(){
+  const s=settings();
+  s.companyName=gv('set-company'); s.kaspiPhone=gv('set-kaspi');
+  s.supportPhone=gv('set-support'); s.whatsapp=gv('set-wa');
+  s.telegram=gv('set-tg'); s.email=gv('set-email');
+  s.workDays=s.workDays||{}; s.workDays.ru=gv('set-wd-ru');
+  s.daysOff=s.daysOff||{}; s.daysOff.ru=gv('set-do-ru');
+  s.defaultDays=gv('set-days');
+  saveSettings(s); toast('✓ Настройки сохранены — клиенты увидят изменения');
+}
+
+if(sessionStorage.getItem('byi2_admin_ok')==='1') showPanel();
+</script>
+</body>
+</html>
