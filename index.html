@@ -814,13 +814,60 @@ async function doRegister(){
   go('s-reg-success');
 }
 function doLogin(){
-  const phone=document.getElementById('li-phone').value.trim(), pass=document.getElementById('li-pass').value;
-  const u=users().find(x=>x.phone===phone && x.password===pass);
-  if(!u){ toast(T('err_login')); return; }
-  if(u.blocked){ toast(T('blocked')); return; }
-  DB.set('byi2_session',{phone});
+ async function doRegister(){
+  const phone = document.getElementById('rg-phone').value.trim();
+
+  const { error } = await supabaseClient
+    .from('users')
+    .insert({
+      first_name: document.getElementById('rg-fname').value.trim(),
+      last_name: document.getElementById('rg-lname').value.trim(),
+      iin: document.getElementById('rg-iin').value.trim(),
+      phone: phone,
+      email: document.getElementById('rg-email').value.trim() || null,
+      brand: document.getElementById('rg-brand').value.trim(),
+      model: document.getElementById('rg-model').value.trim(),
+      plate: document.getElementById('rg-plate').value.trim(),
+      vin: document.getElementById('rg-vin').value.trim()
+    });
+
+  if(error){
+    console.error(error);
+
+    if(error.code === '23505'){
+      toast(T('err_phone'));
+    } else {
+      toast('Ошибка регистрации: ' + error.message);
+    }
+
+    return;
+  }
+
+  DB.set('byi2_session', {phone});
+  go('s-reg-success');
+}
+  
+function doLogin(){
+  const phone = document.getElementById('li-phone').value.trim();
+  const pass = document.getElementById('li-pass').value;
+
+  const u = users().find(x => x.phone === phone && x.password === pass);
+
+  if(!u){
+    toast(T('err_login'));
+    return;
+  }
+
+  if(u.blocked){
+    toast(T('blocked'));
+    return;
+  }
+
+  DB.set('byi2_session', {phone});
   go('s-home');
 }
+
+function forgotPass(){
 function forgotPass(){ toast(T('forgot_text')+': '+settings().supportPhone); }
 function confirmLogout(){ askConfirm(T('logout'),T('confirm_logout'),()=>{ localStorage.removeItem('byi2_session'); go('s-welcome'); }); }
 
