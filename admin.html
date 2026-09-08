@@ -55,16 +55,11 @@ th{background:#f8fafc;font-size:11px;color:var(--text2);text-transform:uppercase
 .kv .k{color:var(--text2)}
 .kv .v{font-weight:700;text-align:right}
 select.st-sel{padding:7px 10px;border-radius:9px;border:2px solid var(--line);font-weight:600;font-size:12.5px}
-@media(max-width:720px){
-  th,td{padding:9px 5px;font-size:12px}
-  .stat{min-width:calc(50% - 6px)}
-  .desktop-only{display:none}
-}
+@media(max-width:720px){th,td{padding:9px 5px;font-size:12px}.stat{min-width:calc(50% - 6px)}.desktop-only{display:none}}
 </style>
 </head>
 <body>
 
-<!-- LOCK -->
 <div class="lock" id="lock">
   <div class="card">
     <div class="mark">BYI</div>
@@ -72,11 +67,10 @@ select.st-sel{padding:7px 10px;border-radius:9px;border:2px solid var(--line);fo
     <p class="muted" style="margin:8px 0 18px">Доступ только для SUPER ADMIN</p>
     <div class="field"><input type="password" id="adm-pass" placeholder="Пароль администратора" onkeydown="if(event.key==='Enter')unlock()"></div>
     <button class="btn" style="width:100%" onclick="unlock()">Войти</button>
-    <p class="muted" style="margin-top:14px">Пароль по умолчанию: <b>byi2024</b><br>Смените его в «Настройки → Безопасность»</p>
+    <p class="muted" style="margin-top:14px">Пароль: <b>byi2024</b><br>Сменить его можно в «Настройки → Безопасность»</p>
   </div>
 </div>
 
-<!-- PANEL -->
 <div class="wrap hidden" id="panel">
   <div class="row between" style="margin-bottom:18px">
     <div><h1>👑 BYIGROUP ADMIN</h1><div class="muted" id="adm-date"></div></div>
@@ -92,25 +86,13 @@ select.st-sel{padding:7px 10px;border-radius:9px;border:2px solid var(--line);fo
     <button onclick="tab('settings',this)">⚙️ Настройки</button>
   </div>
 
-  <!-- DASHBOARD -->
   <div id="t-dashboard">
     <div class="grid" id="stats"></div>
-    <div class="card">
-      <h2>Заказы за 7 дней</h2>
-      <div class="chart" id="chart"></div>
-      <div class="chart-lbl" id="chart-lbl"></div>
-    </div>
-    <div class="card">
-      <h2>Последние заказы</h2>
-      <div id="recent-orders"></div>
-    </div>
-    <div class="card">
-      <h2>Последние пополнения</h2>
-      <div id="recent-pays"></div>
-    </div>
+    <div class="card"><h2>Заказы за 7 дней</h2><div class="chart" id="chart"></div><div class="chart-lbl" id="chart-lbl"></div></div>
+    <div class="card"><h2>Последние заказы</h2><div id="recent-orders"></div></div>
+    <div class="card"><h2>Последние пополнения</h2><div id="recent-pays"></div></div>
   </div>
 
-  <!-- CLIENTS -->
   <div id="t-clients" class="hidden">
     <div class="card">
       <div class="row between mb16" style="flex-wrap:wrap">
@@ -121,10 +103,8 @@ select.st-sel{padding:7px 10px;border-radius:9px;border:2px solid var(--line);fo
     </div>
   </div>
 
-  <!-- ORDERS -->
   <div id="t-orders" class="hidden">
-    <div class="card">
-      <h2>Все заказы</h2>
+    <div class="card"><h2>Все заказы</h2>
       <div class="tabs" id="ord-tabs">
         <button class="on" onclick="ordF='all';renderOrdersAdm();markTab(this)">Все</button>
         <button onclick="ordF='new';renderOrdersAdm();markTab(this)">🟡 Новые</button>
@@ -136,383 +116,326 @@ select.st-sel{padding:7px 10px;border-radius:9px;border:2px solid var(--line);fo
     </div>
   </div>
 
-  <!-- SERVICES -->
   <div id="t-services" class="hidden">
-    <div class="card">
-      <div class="row between mb16"><h2 style="margin:0">Услуги — полное управление</h2>
-      <button class="btn green sm" onclick="addService()">+ Добавить услугу</button></div>
-      <div id="svc-admin-list"></div>
-    </div>
+    <div class="card"><div class="row between mb16"><h2 style="margin:0">Услуги — полное управление</h2><button class="btn green sm" onclick="addService()">+ Добавить услугу</button></div><div id="svc-admin-list"></div></div>
   </div>
 
-  <!-- PAYMENTS -->
   <div id="t-payments" class="hidden">
-    <div class="card">
-      <h2>Пополнения баланса</h2>
-      <div id="payments-list" style="overflow-x:auto"></div>
-    </div>
+    <div class="card"><h2>Пополнения баланса</h2><div id="payments-list" style="overflow-x:auto"></div></div>
   </div>
 
-  <!-- SETTINGS -->
   <div id="t-settings" class="hidden">
-    <div class="card">
-      <h2>🏢 Компания</h2>
-      <div class="field"><label>Название компании</label><input id="set-company"></div>
-    </div>
-    <div class="card">
-      <h2>💳 Платёжные реквизиты (видят клиенты)</h2>
-      <div class="field"><label>Номер Kaspi Gold</label><input id="set-kaspi"></div>
-    </div>
-    <div class="card">
-      <h2>📞 Поддержка</h2>
-      <div class="field"><label>Телефон поддержки</label><input id="set-support"></div>
-      <div class="field"><label>WhatsApp (только цифры)</label><input id="set-wa"></div>
-      <div class="field"><label>Telegram (username, необязательно)</label><input id="set-tg" placeholder="@byigroup"></div>
-      <div class="field"><label>Email</label><input id="set-email"></div>
-    </div>
-    <div class="card">
-      <h2>📅 Рабочие дни</h2>
-      <div class="row">
-        <div class="field flex1"><label>Рабочие дни (RU)</label><input id="set-wd-ru"></div>
-        <div class="field flex1"><label>Выходные (RU)</label><input id="set-do-ru"></div>
-      </div>
-      <div class="field"><label>Срок обработки по умолчанию (дней)</label><input id="set-days"></div>
-    </div>
+    <div class="card"><h2>🏢 Компания</h2><div class="field"><label>Название компании</label><input id="set-company"></div></div>
+    <div class="card"><h2>💳 Платёжные реквизиты (видят клиенты)</h2><div class="field"><label>Номер Kaspi Gold</label><input id="set-kaspi"></div></div>
+    <div class="card"><h2>📞 Поддержка</h2><div class="field"><label>Телефон поддержки</label><input id="set-support"></div><div class="field"><label>WhatsApp (только цифры)</label><input id="set-wa"></div><div class="field"><label>Telegram (username, необязательно)</label><input id="set-tg" placeholder="@byigroup"></div><div class="field"><label>Email</label><input id="set-email"></div></div>
+    <div class="card"><h2>📅 Рабочие дни</h2><div class="row"><div class="field flex1"><label>Рабочие дни (RU)</label><input id="set-wd-ru"></div><div class="field flex1"><label>Выходные (RU)</label><input id="set-do-ru"></div></div><div class="field"><label>Срок обработки по умолчанию (дней)</label><input id="set-days"></div></div>
     <button class="btn" onclick="saveAllSettings()">💾 Сохранить все настройки</button>
-
-    <div class="card mt16">
-      <h2>🔒 Безопасность</h2>
-      <div class="field"><label>Текущий пароль</label><input type="password" id="sec-old"></div>
-      <div class="field"><label>Новый пароль</label><input type="password" id="sec-new"></div>
-      <button class="btn" onclick="changePass()">Сменить пароль</button>
-    </div>
-    <div class="card">
-      <h2>🔗 Секретный адрес панели</h2>
-      <p class="muted">Никому не сообщайте этот адрес:</p>
-      <div class="card" style="background:#f8fafc;margin:10px 0 0"><b id="admin-url"></b></div>
-    </div>
+    <div class="card mt16"><h2>🔒 Безопасность</h2><div class="field"><label>Текущий пароль</label><input type="password" id="sec-old"></div><div class="field"><label>Новый пароль</label><input type="password" id="sec-new"></div><button class="btn" onclick="changePass()">Сменить пароль</button></div>
+    <div class="card"><h2>🔗 Адрес панели</h2><p class="muted">Никому не сообщайте этот адрес:</p><div class="card" style="background:#f8fafc;margin:10px 0 0"><b id="admin-url"></b></div></div>
   </div>
 </div>
 
-<!-- CLIENT MODAL -->
-<div class="modal-b" id="client-modal">
-  <div class="modal-c" id="client-modal-body"></div>
-</div>
-
+<div class="modal-b" id="client-modal"><div class="modal-c" id="client-modal-body"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
-/* ===== общее хранилище с клиентским приложением (ключи byi2_*) ===== */
+/* ===== SUPABASE ===== */
+const SUPABASE_URL='https://tgfyalpkmiktwoiuqlap.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_netfvVlkoMbFTTXvydOcjg_iDMqXyNE';
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+
+/* ===== LOCAL DATA FOR OLD MODULES ===== */
 const DB={get(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}},set(k,v){localStorage.setItem(k,JSON.stringify(v));}};
 function settings(){return DB.get('byi2_settings',null);}
 function saveSettings(s){DB.set('byi2_settings',s);}
-function users(){return DB.get('byi2_users',[]);}
-function saveUsers(u){DB.set('byi2_users',u);}
 function orders(){return DB.get('byi2_orders',[]);}
 function saveOrders(o){DB.set('byi2_orders',o);}
 function txs(){return DB.get('byi2_tx',[]);}
 function saveTxs(t){DB.set('byi2_tx',t);}
 function payments(){return DB.get('byi2_payments',[]);}
 function savePayments(p){DB.set('byi2_payments',p);}
-function fmt(n){return (n||0).toLocaleString('ru-RU')+' ₸';}
+function fmt(n){return Number(n||0).toLocaleString('ru-RU')+' ₸';}
 function fmtDT(d){return new Date(d).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),2400);}
 const ST={new:'Новый',accepted:'Принят',processing:'В обработке',ready:'Документы готовы',done:'Завершён',cancelled:'Отменён'};
 function stBadge(st){return `<span class="badge st-${st}">${ST[st]||st}</span>`;}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+function gv(id){return document.getElementById(id).value;}
 
-/* ===== AUTH ===== */
-function admPass(){return localStorage.getItem('byi2_admin_pass')||'byi2024';}
-function unlock(){
-  if(document.getElementById('adm-pass').value===admPass()){
-    sessionStorage.setItem('byi2_admin_ok','1'); showPanel();
-  } else toast('Неверный пароль');
+/* ===== SUPABASE CLIENTS ===== */
+let clients=[];
+let adminPassword='';
+let ordF='all';
+
+async function adminRPC(name,params){
+  return await supabaseClient.rpc(name,params||{});
 }
-function lockPanel(){sessionStorage.removeItem('byi2_admin_ok');location.reload();}
+
+async function unlock(){
+  const p=document.getElementById('adm-pass').value.trim();
+  if(!p){toast('Введите пароль');return;}
+  const {data,error}=await adminRPC('byi_admin_login',{p_password:p});
+  if(error){console.error(error);toast('Ошибка входа: '+error.message);return;}
+  if(data!==true){toast('Неверный пароль');return;}
+  adminPassword=p;
+  sessionStorage.setItem('byi2_admin_ok','1');
+  showPanel();
+}
+
+function lockPanel(){
+  adminPassword='';
+  sessionStorage.removeItem('byi2_admin_ok');
+  location.reload();
+}
+
+async function loadClients(){
+  const box=document.getElementById('clients-list');
+  box.innerHTML='<p class="muted">Загрузка клиентов из Supabase...</p>';
+  const {data,error}=await adminRPC('byi_admin_get_users',{p_password:adminPassword});
+  if(error){
+    console.error(error);
+    box.innerHTML='<p class="muted">Не удалось загрузить клиентов.</p>';
+    toast('Ошибка загрузки клиентов: '+error.message);
+    return;
+  }
+  clients=Array.isArray(data)?data:[];
+  renderClients();
+}
+
+async function updateClient(c){
+  const payload={
+    p_password:adminPassword,
+    p_old_phone:c.oldPhone,
+    p_phone:c.phone,
+    p_first_name:c.first_name,
+    p_last_name:c.last_name,
+    p_iin:c.iin,
+    p_email:c.email||null,
+    p_brand:c.brand,
+    p_model:c.model,
+    p_plate:c.plate,
+    p_vin:c.vin,
+    p_balance:Number(c.balance||0),
+    p_blocked:!!c.blocked
+  };
+  return await adminRPC('byi_admin_update_user',payload);
+}
+
+async function toggleBlock(i){
+  const u=clients[i];
+  const r=await updateClient({
+    oldPhone:u.phone,phone:u.phone,first_name:u.first_name||'',last_name:u.last_name||'',
+    iin:u.iin||'',email:u.email||null,brand:u.brand||'',model:u.model||'',
+    plate:u.plate||'',vin:u.vin||'',balance:u.balance||0,blocked:!u.blocked
+  });
+  if(r.error){console.error(r.error);toast('Ошибка: '+r.error.message);return;}
+  toast(u.blocked?'Клиент разблокирован':'Клиент заблокирован');
+  await loadClients();
+  renderAll();
+}
+
+function renderClients(){
+  const q=(document.getElementById('cl-search').value||'').toLowerCase().trim();
+  let us=clients;
+  if(q)us=us.filter(u=>[u.first_name,u.last_name,u.phone,u.iin,u.plate,u.brand,u.model,u.vin].join(' ').toLowerCase().includes(q));
+  const box=document.getElementById('clients-list');
+  if(!us.length){box.innerHTML='<p class="muted">Клиентов пока нет</p>';return;}
+  let html='<table><tr><th>Клиент</th><th>Телефон</th><th class="desktop-only">ИИН</th><th>Автомобиль</th><th>Баланс</th><th class="desktop-only">Регистрация</th><th>Статус</th><th></th></tr>';
+  us.forEach((u)=>{
+    const i=clients.indexOf(u);
+    const veh=[u.brand,u.model].filter(Boolean).join(' ')+' '+(u.plate||'');
+    html+=`<tr><td><b>${esc(u.first_name||'')} ${esc(u.last_name||'')}</b></td><td>${esc(u.phone||'')}</td>
+    <td class="desktop-only">${esc(u.iin||'')}</td><td>${esc(veh.trim()||'—')}</td>
+    <td><b>${fmt(u.balance)}</b></td><td class="desktop-only">${u.created_at?new Date(u.created_at).toLocaleDateString('ru-RU'):'—'}</td>
+    <td>${u.blocked?'<span class="badge st-cancelled">Заблокирован</span>':'<span class="badge st-done">Активен</span>'}</td>
+    <td style="white-space:nowrap"><button class="btn sm ghost" onclick="openClient(${i})">Открыть</button>
+    <button class="btn sm ${u.blocked?'green':'red'}" onclick="toggleBlock(${i})">${u.blocked?'Разблок.':'Блок'}</button></td></tr>`;
+  });
+  box.innerHTML=html+'</table>';
+}
+
+function openClient(i){
+  const u=clients[i];
+  document.getElementById('client-modal-body').innerHTML=`
+    <div class="row between"><h2 style="margin:0">👤 ${esc(u.first_name||'')} ${esc(u.last_name||'')}</h2><button class="btn sm ghost" onclick="closeClient()">✕</button></div>
+    <div class="kv"><span class="k">Телефон</span><span class="v">${esc(u.phone||'')}</span></div>
+    <div class="kv"><span class="k">ИИН</span><span class="v">${esc(u.iin||'')}</span></div>
+    <div class="kv"><span class="k">Email</span><span class="v">${esc(u.email||'—')}</span></div>
+    <div class="kv"><span class="k">Регистрация</span><span class="v">${u.created_at?new Date(u.created_at).toLocaleString('ru-RU'):'—'}</span></div>
+    <div class="kv"><span class="k">Баланс</span><span class="v">${fmt(u.balance)}</span></div>
+    <div class="kv"><span class="k">Автомобиль</span><span class="v">${esc([u.brand,u.model].filter(Boolean).join(' ')||'—')}</span></div>
+    <div class="kv"><span class="k">Госномер</span><span class="v">${esc(u.plate||'—')}</span></div>
+    <div class="kv"><span class="k">VIN</span><span class="v">${esc(u.vin||'—')}</span></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn sm flex1" onclick="editBalance(${i})">💰 Изменить баланс</button>
+      <button class="btn sm ghost flex1" onclick="editClient(${i})">✏️ Редактировать</button>
+    </div>`;
+  document.getElementById('client-modal').classList.add('show');
+}
+function closeClient(){document.getElementById('client-modal').classList.remove('show');}
+
+async function editBalance(i){
+  const u=clients[i];
+  const val=prompt('Новый баланс для '+(u.first_name||'клиента')+' (₸):',u.balance||0);
+  if(val===null)return;
+  const nb=Number(val);
+  if(!Number.isFinite(nb)||nb<0){toast('Введите корректную сумму');return;}
+  const r=await updateClient({
+    oldPhone:u.phone,phone:u.phone,first_name:u.first_name||'',last_name:u.last_name||'',iin:u.iin||'',
+    email:u.email||null,brand:u.brand||'',model:u.model||'',plate:u.plate||'',vin:u.vin||'',
+    balance:nb,blocked:!!u.blocked
+  });
+  if(r.error){console.error(r.error);toast('Ошибка: '+r.error.message);return;}
+  toast('✓ Баланс обновлён');
+  await loadClients();renderAll();openClient(clients.findIndex(x=>x.phone===u.phone));
+}
+
+async function editClient(i){
+  const u=clients[i];
+  const fn=prompt('Имя:',u.first_name||'');if(fn===null)return;
+  const ln=prompt('Фамилия:',u.last_name||'');if(ln===null)return;
+  const phone=prompt('Телефон:',u.phone||'');if(phone===null)return;
+  const iin=prompt('ИИН:',u.iin||'');if(iin===null)return;
+  const email=prompt('Email:',u.email||'');if(email===null)return;
+  const brand=prompt('Марка:',u.brand||'');if(brand===null)return;
+  const model=prompt('Модель:',u.model||'');if(model===null)return;
+  const plate=prompt('Госномер:',u.plate||'');if(plate===null)return;
+  const vin=prompt('VIN:',u.vin||'');if(vin===null)return;
+  const r=await updateClient({
+    oldPhone:u.phone,phone:phone.trim(),first_name:fn.trim(),last_name:ln.trim(),iin:iin.trim(),
+    email:email.trim()||null,brand:brand.trim(),model:model.trim(),plate:plate.trim(),vin:vin.trim(),
+    balance:Number(u.balance||0),blocked:!!u.blocked
+  });
+  if(r.error){console.error(r.error);toast('Ошибка: '+r.error.message);return;}
+  toast('✓ Клиент сохранён');
+  await loadClients();renderAll();
+}
+
+/* ===== OLD LOCAL MODULES: orders/services/payments/settings ===== */
+function tab(t,btn){
+  ['dashboard','clients','orders','services','payments','settings'].forEach(x=>document.getElementById('t-'+x).classList.toggle('hidden',x!==t));
+  document.querySelectorAll('.tabs>button').forEach(b=>b.classList.toggle('on',b===btn));
+  if(t==='clients')loadClients();
+  if(t==='orders')renderOrdersAdm();
+}
+
 function showPanel(){
   document.getElementById('lock').classList.add('hidden');
   document.getElementById('panel').classList.remove('hidden');
   document.getElementById('adm-date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
   document.getElementById('admin-url').textContent=location.origin+location.pathname;
-  fillSettings(); renderAll();
+  fillSettings();
+  renderAll();
+  loadClients();
 }
-function changePass(){
-  if(document.getElementById('sec-old').value!==admPass()){toast('Текущий пароль неверен');return;}
-  const n=document.getElementById('sec-new').value;
-  if(n.length<4){toast('Минимум 4 символа');return;}
-  localStorage.setItem('byi2_admin_pass',n);
-  document.getElementById('sec-old').value='';document.getElementById('sec-new').value='';
-  toast('✓ Пароль изменён');
-}
-function tab(t,btn){
-  ['dashboard','clients','orders','services','payments','settings'].forEach(x=>document.getElementById('t-'+x).classList.toggle('hidden',x!==t));
-  document.querySelectorAll('.tabs>button').forEach(b=>b.classList.toggle('on',b===btn));
-  if(t==='clients')renderClients();
-  if(t==='orders')renderOrdersAdm();
-}
-function markTab(b){document.querySelectorAll('#ord-tabs button').forEach(x=>x.classList.toggle('on',x===b));}
 
-/* ===== RENDER ALL ===== */
 function renderAll(){
-  const us=users(),os=orders(),ps=payments(),tx=txs();
+  const os=orders(),ps=payments(),tx=txs();
   const revenue=tx.filter(t=>t.type==='pay').reduce((a,t)=>a+Math.abs(t.amount),0);
   const pend=ps.filter(p=>p.status==='pending').length;
   document.getElementById('stats').innerHTML=`
-    <div class="stat"><div class="n">${us.length}</div><div class="l">Всего клиентов</div></div>
+    <div class="stat"><div class="n">${clients.length}</div><div class="l">Всего клиентов</div></div>
     <div class="stat"><div class="n">${os.filter(o=>o.status==='new'||o.status==='accepted').length}</div><div class="l">Новые заказы</div></div>
     <div class="stat"><div class="n">${os.filter(o=>['processing','ready'].includes(o.status)).length}</div><div class="l">В обработке</div></div>
     <div class="stat"><div class="n">${os.filter(o=>o.status==='done').length}</div><div class="l">Завершено</div></div>
     <div class="stat"><div class="n">${pend}</div><div class="l">Пополнений ждут</div></div>
     <div class="stat"><div class="n">${fmt(revenue)}</div><div class="l">Общий оборот</div></div>`;
   document.getElementById('pay-cnt').textContent=pend?`(${pend})`:'';
-  renderChart(os);
-  renderRecent(os,ps);
-  renderServicesAdm(); renderPayments();
+  renderChart(os);renderRecent(os,ps);renderServicesAdm();renderPayments();
 }
 function renderChart(os){
   const days=[],counts=[];
-  for(let i=6;i>=0;i--){
-    const d=new Date(); d.setDate(d.getDate()-i);
-    const key=d.toDateString();
-    days.push(d.toLocaleDateString('ru-RU',{weekday:'short'}));
-    counts.push(os.filter(o=>new Date(o.created).toDateString()===key).length);
-  }
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(d.toLocaleDateString('ru-RU',{weekday:'short'}));counts.push(os.filter(o=>new Date(o.created).toDateString()===d.toDateString()).length);}
   const max=Math.max(...counts,1);
   document.getElementById('chart').innerHTML=counts.map(c=>`<div class="bar" style="height:${Math.max(c/max*100,3)}%"><span>${c||''}</span></div>`).join('');
   document.getElementById('chart-lbl').innerHTML=days.map(d=>`<div>${d}</div>`).join('');
 }
 function renderRecent(os,ps){
-  document.getElementById('recent-orders').innerHTML=os.slice(0,5).length
-    ? '<table>'+os.slice(0,5).map(o=>`<tr><td><b>${o.num}</b></td><td>${o.userName||o.userPhone}</td><td>${(o.svcName&&o.svcName.ru)||''}</td><td>${fmt(o.price)}</td><td>${stBadge(o.status)}</td></tr>`).join('')+'</table>'
-    : '<p class="muted">Заказов пока нет</p>';
-  document.getElementById('recent-pays').innerHTML=ps.slice(0,5).length
-    ? '<table>'+ps.slice(0,5).map(p=>`<tr><td><b>${p.id}</b></td><td>${p.userName}</td><td>${fmt(p.amount)}</td><td>${payBadge(p.status)}</td></tr>`).join('')+'</table>'
-    : '<p class="muted">Пополнений пока нет</p>';
+  document.getElementById('recent-orders').innerHTML=os.slice(0,5).length?'<table>'+os.slice(0,5).map(o=>`<tr><td><b>${esc(o.num)}</b></td><td>${esc(o.userName||o.userPhone||'')}</td><td>${esc((o.svcName&&o.svcName.ru)||'')}</td><td>${fmt(o.price)}</td><td>${stBadge(o.status)}</td></tr>`).join('')+'</table>':'<p class="muted">Заказов пока нет</p>';
+  document.getElementById('recent-pays').innerHTML=ps.slice(0,5).length?'<table>'+ps.slice(0,5).map(p=>`<tr><td><b>${esc(p.id)}</b></td><td>${esc(p.userName||'')}</td><td>${fmt(p.amount)}</td><td>${payBadge(p.status)}</td></tr>`).join('')+'</table>':'<p class="muted">Пополнений пока нет</p>';
 }
 function payBadge(s){return s==='pending'?'<span class="badge st-pending">🟡 Ожидает</span>':s==='ok'?'<span class="badge st-done">🟢 Подтверждено</span>':'<span class="badge st-cancelled">🔴 Отклонено</span>';}
 
-/* ===== CLIENTS ===== */
-function renderClients(){
-  const q=(document.getElementById('cl-search').value||'').toLowerCase();
-  let us=users();
-  if(q) us=us.filter(u=>(u.firstName+' '+u.lastName+' '+u.phone+' '+u.iin).toLowerCase().includes(q));
-  const box=document.getElementById('clients-list');
-  if(!us.length){box.innerHTML='<p class="muted">Клиентов пока нет</p>';return;}
-  let html='<table><tr><th>Клиент</th><th>Телефон</th><th class="desktop-only">ИИН</th><th>Автомобиль</th><th>Баланс</th><th class="desktop-only">Регистрация</th><th>Статус</th><th></th></tr>';
-  us.forEach(u=>{
-    const i=users().findIndex(x=>x.phone===u.phone);
-    const veh=(u.vehicles&&u.vehicles[0])?u.vehicles[0].brand+' '+u.vehicles[0].plate:'—';
-    html+=`<tr>
-      <td><b>${u.firstName} ${u.lastName||''}</b></td><td>${u.phone}</td>
-      <td class="desktop-only">${u.iin}</td><td>${veh}</td>
-      <td><b>${fmt(u.balance)}</b></td>
-      <td class="desktop-only">${new Date(u.created).toLocaleDateString('ru-RU')}</td>
-      <td>${u.blocked?'<span class="badge st-cancelled">Заблокирован</span>':'<span class="badge st-done">Активен</span>'}</td>
-      <td style="white-space:nowrap"><button class="btn sm ghost" onclick="openClient(${i})">Открыть</button>
-      <button class="btn sm ${u.blocked?'green':'red'}" onclick="toggleBlock(${i})">${u.blocked?'Разблок.':'Блок'}</button></td></tr>`;
-  });
-  box.innerHTML=html+'</table>';
-}
-function openClient(i){
-  const u=users()[i];
-  const myOrders=orders().filter(o=>o.userPhone===u.phone);
-  const myTx=txs().filter(t=>t.userPhone===u.phone);
-  let vehHtml='';
-  (u.vehicles||[]).forEach(v=>{
-    vehHtml+=`<div class="card" style="background:#f8fafc;margin:8px 0;padding:12px">🚛 <b>${v.brand} ${v.model}</b> • ${v.plate}${v.vin?` • VIN: ${v.vin}`:''}
-    ${(v.trailers||[]).map(t=>`<div class="muted">🚚 ${t.brand} • ${t.plate}</div>`).join('')}</div>`;
-  });
-  document.getElementById('client-modal-body').innerHTML=`
-    <div class="row between mb16"><h2 style="margin:0">👤 ${u.firstName} ${u.lastName||''}</h2>
-    <button class="btn sm ghost" onclick="closeClient()">✕</button></div>
-    <div class="kv"><span class="k">Телефон</span><span class="v">${u.phone}</span></div>
-    <div class="kv"><span class="k">ИИН</span><span class="v">${u.iin}</span></div>
-    <div class="kv"><span class="k">Email</span><span class="v">${u.email||'—'}</span></div>
-    <div class="kv"><span class="k">Регистрация</span><span class="v">${new Date(u.created).toLocaleString('ru-RU')}</span></div>
-    <div class="kv"><span class="k">Баланс</span><span class="v" style="color:var(--navy)">${fmt(u.balance)}</span></div>
-    <div class="row mt16">
-      <button class="btn sm flex1" onclick="editBalance(${i})">💰 Изменить баланс</button>
-      <button class="btn sm ghost flex1" onclick="editClient(${i})">✏️ Редактировать</button>
-    </div>
-    <h2 class="mt16">Автомобили (${(u.vehicles||[]).length})</h2>
-    ${vehHtml||'<p class="muted">Нет автомобилей</p>'}
-    <h2>Заказы (${myOrders.length})</h2>
-    ${myOrders.length?'<table>'+myOrders.map(o=>`<tr><td><b>${o.num}</b></td><td>${(o.svcName&&o.svcName.ru)||''}</td><td>${fmt(o.price)}</td><td>${stBadge(o.status)}</td></tr>`).join('')+'</table>':'<p class="muted">Нет заказов</p>'}
-    <h2>История операций (${myTx.length})</h2>
-    ${myTx.length?'<table>'+myTx.slice(0,10).map(t=>`<tr><td>${t.type==='topup'?'💰 Пополнение':t.svc||'Оплата'}</td><td>${fmtDT(t.date)}</td><td style="color:${t.amount>0?'var(--green)':'var(--red)'};font-weight:700">${t.amount>0?'+':''}${fmt(t.amount)}</td></tr>`).join('')+'</table>':'<p class="muted">Нет операций</p>'}`;
-  document.getElementById('client-modal').classList.add('show');
-}
-function closeClient(){document.getElementById('client-modal').classList.remove('show');}
-function toggleBlock(i){
-  const us=users(); us[i].blocked=!us[i].blocked; saveUsers(us);
-  renderClients(); renderAll(); toast(us[i].blocked?'Клиент заблокирован':'Клиент разблокирован');
-}
-function editBalance(i){
-  const us=users();
-  const val=prompt('Новый баланс для '+us[i].firstName+' (₸):', us[i].balance||0);
-  if(val===null)return;
-  const nb=parseInt(val)||0;
-  const diff=nb-(us[i].balance||0);
-  us[i].balance=nb; saveUsers(us);
-  if(diff!==0){const tx=txs();tx.unshift({type:'topup',amount:diff,date:new Date().toISOString(),id:'ADMIN',userPhone:us[i].phone,note:'Корректировка администратором'});saveTxs(tx);}
-  openClient(i); renderAll(); toast('✓ Баланс обновлён');
-}
-function editClient(i){
-  const us=users();
-  const fn=prompt('Имя:',us[i].firstName); if(fn===null)return;
-  const ln=prompt('Фамилия:',us[i].lastName||''); if(ln===null)return;
-  us[i].firstName=fn.trim()||us[i].firstName; us[i].lastName=ln.trim();
-  saveUsers(us); openClient(i); renderClients(); toast('✓ Сохранено');
-}
-
-/* ===== ORDERS ADMIN ===== */
-let ordF='all';
 function renderOrdersAdm(){
   let os=orders();
-  if(ordF==='new') os=os.filter(o=>o.status==='new'||o.status==='accepted');
-  else if(ordF==='processing') os=os.filter(o=>o.status==='processing'||o.status==='ready');
-  else if(ordF!=='all') os=os.filter(o=>o.status===ordF);
+  if(ordF==='new')os=os.filter(o=>o.status==='new'||o.status==='accepted');
+  else if(ordF==='processing')os=os.filter(o=>o.status==='processing'||o.status==='ready');
+  else if(ordF!=='all')os=os.filter(o=>o.status===ordF);
   const box=document.getElementById('orders-adm');
   if(!os.length){box.innerHTML='<p class="muted">Заказов нет</p>';return;}
   let html='<table><tr><th>№</th><th>Клиент</th><th>Услуга</th><th class="desktop-only">Авто</th><th>Цена</th><th class="desktop-only">Дата</th><th>Статус</th></tr>';
-  os.forEach(o=>{
-    const i=orders().findIndex(x=>x.num===o.num);
-    html+=`<tr><td><b>${o.num}</b></td><td>${o.userName||''}<br><span class="muted">${o.userPhone}</span></td>
-    <td>${o.svcIcon||''} ${(o.svcName&&o.svcName.ru)||''}</td>
-    <td class="desktop-only">${o.vehicle||'—'}</td><td><b>${fmt(o.price)}</b></td>
-    <td class="desktop-only">${fmtDT(o.created)}</td>
-    <td><select class="st-sel" onchange="setOrderStatus(${i},this.value)">
-      ${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}
-    </select></td></tr>`;
-  });
+  os.forEach(o=>{const i=orders().findIndex(x=>x.num===o.num);html+=`<tr><td><b>${esc(o.num)}</b></td><td>${esc(o.userName||'')}<br><span class="muted">${esc(o.userPhone||'')}</span></td><td>${esc(o.svcIcon||'')} ${esc((o.svcName&&o.svcName.ru)||'')}</td><td class="desktop-only">${esc(o.vehicle||'—')}</td><td><b>${fmt(o.price)}</b></td><td class="desktop-only">${fmtDT(o.created)}</td><td><select class="st-sel" onchange="setOrderStatus(${i},this.value)">${Object.keys(ST).map(k=>`<option value="${k}" ${o.status===k?'selected':''}>${ST[k]}</option>`).join('')}</select></td></tr>`;});
   box.innerHTML=html+'</table>';
 }
+function markTab(b){document.querySelectorAll('#ord-tabs button').forEach(x=>x.classList.toggle('on',x===b));}
 function setOrderStatus(i,st){
-  const os=orders();
-  os[i].status=st;
-  os[i].history=os[i].history||[];
-  os[i].history.push({status:st,date:new Date().toISOString()});
-  saveOrders(os);
-  /* возврат средств при отмене */
-  if(st==='cancelled'){
-    const us=users(); const ui=us.findIndex(u=>u.phone===os[i].userPhone);
-    if(ui>=0){ us[ui].balance=(us[ui].balance||0)+os[i].price; saveUsers(us);
-      const tx=txs(); tx.unshift({type:'topup',amount:os[i].price,date:new Date().toISOString(),id:os[i].num+' ↩',userPhone:os[i].userPhone,note:'Возврат за отменённый заказ'}); saveTxs(tx);
-    }
-    toast('✓ Заказ отменён, средства возвращены клиенту');
-  } else toast('✓ Статус: '+ST[st]);
-  renderAll(); renderOrdersAdm();
+  const os=orders();os[i].status=st;os[i].history=os[i].history||[];os[i].history.push({status:st,date:new Date().toISOString()});saveOrders(os);
+  if(st==='cancelled')toast('✓ Заказ отменён');else toast('✓ Статус: '+ST[st]);
+  renderAll();renderOrdersAdm();
 }
 
-/* ===== SERVICES ADMIN ===== */
 function renderServicesAdm(){
-  const s=settings(); if(!s) return;
-  const box=document.getElementById('svc-admin-list'); box.innerHTML='';
-  s.services.forEach((sv,i)=>{
-    const el=document.createElement('div'); el.className='svc-edit';
-    el.innerHTML=`
-      <div class="row between" style="flex-wrap:wrap;gap:8px">
-        <div class="row"><span style="font-size:24px">${sv.icon}</span><div><b>${sv.name.ru}</b><div class="muted">${fmt(sv.price)} • ${sv.days} дн.</div></div></div>
-        <div class="row">
-          <label style="font-size:12.5px;display:flex;gap:6px;align-items:center;font-weight:600"><input type="checkbox" ${sv.active?'checked':''} onchange="toggleSvc(${i},this.checked)"> Активна</label>
-          <button class="btn sm ghost" onclick="toggleEditSv('${sv.id}')">✏️ Изменить</button>
-          <button class="btn sm red" onclick="delSvc(${i})">🗑</button>
-        </div>
-      </div>
-      <div class="hidden" id="edit-${sv.id}" style="margin-top:14px">
-        <div class="row">
-          <div class="field flex1"><label>Название RU</label><input id="e-nr-${sv.id}" value="${esc(sv.name.ru)}"></div>
-          <div class="field flex1"><label>Название KZ</label><input id="e-nk-${sv.id}" value="${esc(sv.name.kk)}"></div>
-          <div class="field flex1"><label>Название EN</label><input id="e-ne-${sv.id}" value="${esc(sv.name.en)}"></div>
-        </div>
-        <div class="row">
-          <div class="field flex1"><label>Цена (₸)</label><input type="number" id="e-p-${sv.id}" value="${sv.price}"></div>
-          <div class="field flex1"><label>Срок (дней)</label><input id="e-d-${sv.id}" value="${esc(sv.days)}"></div>
-          <div class="field" style="width:96px"><label>Иконка</label><input id="e-i-${sv.id}" value="${sv.icon}"></div>
-        </div>
-        <div class="field"><label>Описание RU</label><input id="e-dr-${sv.id}" value="${esc(sv.desc.ru)}"></div>
-        <div class="row">
-          <div class="field flex1"><label>Описание KZ</label><input id="e-dk-${sv.id}" value="${esc(sv.desc.kk)}"></div>
-          <div class="field flex1"><label>Описание EN</label><input id="e-de-${sv.id}" value="${esc(sv.desc.en)}"></div>
-        </div>
-        <button class="btn green sm" onclick="saveSvc(${i},'${sv.id}')">💾 Сохранить</button>
-      </div>`;
-    box.appendChild(el);
-  });
+  const s=settings();if(!s||!s.services)return;
+  const box=document.getElementById('svc-admin-list');box.innerHTML='';
+  s.services.forEach((sv,i)=>{const el=document.createElement('div');el.className='svc-edit';el.innerHTML=`
+  <div class="row between" style="flex-wrap:wrap;gap:8px"><div class="row"><span style="font-size:24px">${esc(sv.icon)}</span><div><b>${esc(sv.name.ru)}</b><div class="muted">${fmt(sv.price)} • ${esc(sv.days)} дн.</div></div></div>
+  <div class="row"><label style="font-size:12.5px;display:flex;gap:6px;align-items:center;font-weight:600"><input type="checkbox" ${sv.active?'checked':''} onchange="toggleSvc(${i},this.checked)"> Активна</label>
+  <button class="btn sm ghost" onclick="toggleEditSv('${esc(sv.id)}')">✏️ Изменить</button><button class="btn sm red" onclick="delSvc(${i})">🗑</button></div></div>
+  <div class="hidden" id="edit-${esc(sv.id)}" style="margin-top:14px">
+  <div class="row"><div class="field flex1"><label>Название RU</label><input id="e-nr-${esc(sv.id)}" value="${esc(sv.name.ru)}"></div><div class="field flex1"><label>Название KZ</label><input id="e-nk-${esc(sv.id)}" value="${esc(sv.name.kk)}"></div><div class="field flex1"><label>Название EN</label><input id="e-ne-${esc(sv.id)}" value="${esc(sv.name.en)}"></div></div>
+  <div class="row"><div class="field flex1"><label>Цена (₸)</label><input type="number" id="e-p-${esc(sv.id)}" value="${sv.price}"></div><div class="field flex1"><label>Срок (дней)</label><input id="e-d-${esc(sv.id)}" value="${esc(sv.days)}"></div><div class="field" style="width:96px"><label>Иконка</label><input id="e-i-${esc(sv.id)}" value="${esc(sv.icon)}"></div></div>
+  <div class="field"><label>Описание RU</label><input id="e-dr-${esc(sv.id)}" value="${esc(sv.desc.ru)}"></div>
+  <div class="row"><div class="field flex1"><label>Описание KZ</label><input id="e-dk-${esc(sv.id)}" value="${esc(sv.desc.kk)}"></div><div class="field flex1"><label>Описание EN</label><input id="e-de-${esc(sv.id)}" value="${esc(sv.desc.en)}"></div></div>
+  <button class="btn green sm" onclick="saveSvc(${i},'${esc(sv.id)}')">💾 Сохранить</button></div>`;box.appendChild(el);});
 }
-function esc(s){return String(s||'').replace(/"/g,'&quot;');}
-function gv(id){return document.getElementById(id).value;}
 function toggleEditSv(id){document.getElementById('edit-'+id).classList.toggle('hidden');}
 function toggleSvc(i,v){const s=settings();s.services[i].active=v;saveSettings(s);toast(v?'✓ Услуга включена':'✓ Услуга выключена');}
-function saveSvc(i,id){
-  const s=settings(); const sv=s.services[i];
-  sv.name={ru:gv('e-nr-'+id),kk:gv('e-nk-'+id),en:gv('e-ne-'+id)};
-  sv.desc={ru:gv('e-dr-'+id),kk:gv('e-dk-'+id),en:gv('e-de-'+id)};
-  sv.price=parseInt(gv('e-p-'+id))||0; sv.days=gv('e-d-'+id); sv.icon=gv('e-i-'+id);
-  saveSettings(s); renderServicesAdm(); toast('✓ Услуга обновлена');
-}
-function delSvc(i){
-  if(!confirm('Удалить услугу «'+settings().services[i].name.ru+'»?'))return;
-  const s=settings(); s.services.splice(i,1); saveSettings(s); renderServicesAdm(); toast('✓ Удалено');
-}
-function addService(){
-  const s=settings();
-  s.services.push({id:'svc'+Date.now(),icon:'📑',name:{ru:'Новая услуга',kk:'Жаңа қызмет',en:'New service'},desc:{ru:'Описание услуги',kk:'Қызмет сипаттамасы',en:'Service description'},price:5000,days:'1-2',active:false});
-  saveSettings(s); renderServicesAdm(); toast('✓ Добавлена (выключена) — отредактируйте и включите');
-}
+function saveSvc(i,id){const s=settings(),sv=s.services[i];sv.name={ru:gv('e-nr-'+id),kk:gv('e-nk-'+id),en:gv('e-ne-'+id)};sv.desc={ru:gv('e-dr-'+id),kk:gv('e-dk-'+id),en:gv('e-de-'+id)};sv.price=parseInt(gv('e-p-'+id))||0;sv.days=gv('e-d-'+id);sv.icon=gv('e-i-'+id);saveSettings(s);renderServicesAdm();toast('✓ Услуга обновлена');}
+function delSvc(i){if(!confirm('Удалить услугу «'+settings().services[i].name.ru+'»?'))return;const s=settings();s.services.splice(i,1);saveSettings(s);renderServicesAdm();toast('✓ Удалено');}
+function addService(){const s=settings();if(!s)return;s.services.push({id:'svc'+Date.now(),icon:'📑',name:{ru:'Новая услуга',kk:'Жаңа қызмет',en:'New service'},desc:{ru:'Описание услуги',kk:'Қызмет сипаттамасы',en:'Service description'},price:5000,days:'1-2',active:false});saveSettings(s);renderServicesAdm();toast('✓ Добавлена (выключена) — отредактируйте и включите');}
 
-/* ===== PAYMENTS ===== */
 function renderPayments(){
-  const ps=payments();
-  const box=document.getElementById('payments-list');
+  const ps=payments(),box=document.getElementById('payments-list');
   if(!ps.length){box.innerHTML='<p class="muted">Пополнений пока нет</p>';return;}
   let html='<table><tr><th>ID</th><th>Клиент</th><th>Сумма</th><th class="desktop-only">Дата</th><th class="desktop-only">Чек</th><th>Статус</th><th></th></tr>';
-  ps.forEach((p,i)=>{
-    html+=`<tr><td><b>${p.id}</b></td><td>${p.userName}<br><span class="muted">${p.userPhone}</span></td>
-    <td><b>${fmt(p.amount)}</b></td><td class="desktop-only">${fmtDT(p.created)}</td>
-    <td class="desktop-only">${p.receiptName?'📎 '+p.receiptName:'—'}${p.comment?'<br><span class="muted">'+p.comment+'</span>':''}</td>
-    <td>${payBadge(p.status)}</td>
-    <td style="white-space:nowrap">${p.status==='pending'?`<button class="btn sm green" onclick="approvePay(${i})">✓ Подтвердить</button> <button class="btn sm red" onclick="rejectPay(${i})">✗</button>`:''}</td></tr>`;
-  });
+  ps.forEach((p,i)=>{html+=`<tr><td><b>${esc(p.id)}</b></td><td>${esc(p.userName||'')}<br><span class="muted">${esc(p.userPhone||'')}</span></td><td><b>${fmt(p.amount)}</b></td><td class="desktop-only">${fmtDT(p.created)}</td><td class="desktop-only">${p.receiptName?'📎 '+esc(p.receiptName):'—'}${p.comment?'<br><span class="muted">'+esc(p.comment)+'</span>':''}</td><td>${payBadge(p.status)}</td><td style="white-space:nowrap">${p.status==='pending'?`<button class="btn sm green" onclick="approvePay(${i})">✓ Подтвердить</button> <button class="btn sm red" onclick="rejectPay(${i})">✗</button>`:''}</td></tr>`;});
   box.innerHTML=html+'</table>';
 }
-function approvePay(i){
-  const ps=payments(); ps[i].status='ok'; ps[i].processedDate=new Date().toISOString(); savePayments(ps);
-  const p=ps[i];
-  const us=users(); const ui=us.findIndex(u=>u.phone===p.userPhone);
-  if(ui>=0){ us[ui].balance=(us[ui].balance||0)+p.amount; saveUsers(us); }
-  const tx=txs(); tx.unshift({type:'topup',amount:p.amount,date:new Date().toISOString(),id:p.id,userPhone:p.userPhone}); saveTxs(tx);
-  renderAll(); toast('✓ Подтверждено: +'+fmt(p.amount)+' → '+p.userName);
-}
-function rejectPay(i){
-  const ps=payments(); ps[i].status='rej'; savePayments(ps);
-  renderAll(); toast('Пополнение отклонено');
-}
+function approvePay(i){const ps=payments();ps[i].status='ok';ps[i].processedDate=new Date().toISOString();savePayments(ps);toast('✓ Пополнение подтверждено');renderAll();}
+function rejectPay(i){const ps=payments();ps[i].status='rej';savePayments(ps);renderAll();toast('Пополнение отклонено');}
 
-/* ===== SETTINGS ===== */
 function fillSettings(){
-  const s=settings(); if(!s)return;
-  document.getElementById('set-company').value=s.companyName||'';
-  document.getElementById('set-kaspi').value=s.kaspiPhone||'';
-  document.getElementById('set-support').value=s.supportPhone||'';
-  document.getElementById('set-wa').value=s.whatsapp||'';
-  document.getElementById('set-tg').value=s.telegram||'';
-  document.getElementById('set-email').value=s.email||'';
-  document.getElementById('set-wd-ru').value=(s.workDays&&s.workDays.ru)||'';
-  document.getElementById('set-do-ru').value=(s.daysOff&&s.daysOff.ru)||'';
+  const s=settings();if(!s)return;
+  document.getElementById('set-company').value=s.companyName||'';document.getElementById('set-kaspi').value=s.kaspiPhone||'';
+  document.getElementById('set-support').value=s.supportPhone||'';document.getElementById('set-wa').value=s.whatsapp||'';
+  document.getElementById('set-tg').value=s.telegram||'';document.getElementById('set-email').value=s.email||'';
+  document.getElementById('set-wd-ru').value=(s.workDays&&s.workDays.ru)||'';document.getElementById('set-do-ru').value=(s.daysOff&&s.daysOff.ru)||'';
   document.getElementById('set-days').value=s.defaultDays||'1-2';
 }
 function saveAllSettings(){
-  const s=settings();
-  s.companyName=gv('set-company'); s.kaspiPhone=gv('set-kaspi');
-  s.supportPhone=gv('set-support'); s.whatsapp=gv('set-wa');
-  s.telegram=gv('set-tg'); s.email=gv('set-email');
-  s.workDays=s.workDays||{}; s.workDays.ru=gv('set-wd-ru');
-  s.daysOff=s.daysOff||{}; s.daysOff.ru=gv('set-do-ru');
-  s.defaultDays=gv('set-days');
-  saveSettings(s); toast('✓ Настройки сохранены — клиенты увидят изменения');
+  const s=settings();if(!s)return;
+  s.companyName=gv('set-company');s.kaspiPhone=gv('set-kaspi');s.supportPhone=gv('set-support');s.whatsapp=gv('set-wa');s.telegram=gv('set-tg');s.email=gv('set-email');
+  s.workDays=s.workDays||{};s.workDays.ru=gv('set-wd-ru');s.daysOff=s.daysOff||{};s.daysOff.ru=gv('set-do-ru');s.defaultDays=gv('set-days');
+  saveSettings(s);toast('✓ Настройки сохранены');
 }
 
-if(sessionStorage.getItem('byi2_admin_ok')==='1') showPanel();
+async function changePass(){
+  const oldP=document.getElementById('sec-old').value;
+  const newP=document.getElementById('sec-new').value;
+  if(newP.length<4){toast('Минимум 4 символа');return;}
+  const {data,error}=await adminRPC('byi_admin_change_password',{p_old_password:oldP,p_new_password:newP});
+  if(error){console.error(error);toast('Ошибка смены пароля: '+error.message);return;}
+  if(data!==true){toast('Текущий пароль неверен');return;}
+  adminPassword=newP;
+  document.getElementById('sec-old').value='';document.getElementById('sec-new').value='';
+  toast('✓ Пароль изменён');
+}
+
+document.getElementById('cl-search').addEventListener('input',renderClients);
+
+if(sessionStorage.getItem('byi2_admin_ok')==='1'){
+  sessionStorage.removeItem('byi2_admin_ok');
+}
 </script>
 </body>
 </html>
