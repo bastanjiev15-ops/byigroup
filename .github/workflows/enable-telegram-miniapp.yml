@@ -1,4 +1,4 @@
-name: Enable Telegram Mini App
+name: BYIGROUP Mini App integration
 
 on:
   push:
@@ -13,43 +13,62 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Patch index.html
+      - name: Patch client application
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path('index.html')
-          s = p.read_text(encoding='utf-8')
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
 
-          sdk = '<script src="https://telegram.org/js/telegram-web-app.js"></script>'
-          init = '''<script>
+          sdk='<script src="https://telegram.org/js/telegram-web-app.js"></script>'
+          bridge='<script src="telegram.js"></script>'
+          desktop='''<style id="byi-responsive-v2">
+          @media (min-width:481px){
+            body{background:#eef2f7}
+            .app{max-width:1200px;min-height:100vh;box-shadow:0 0 50px rgba(15,42,92,.12)}
+            .screen{padding:28px 34px 40px}
+            .menu-grid{grid-template-columns:repeat(4,minmax(150px,1fr));gap:16px}
+            .svc,.card,.list-item{max-width:none}
+            .bnav{position:sticky;top:0;bottom:auto;left:auto;transform:none;max-width:1200px;border-top:0;border-bottom:1px solid var(--line);border-radius:0;order:-1}
+            .bnav a{padding:13px 8px;font-size:12px}
+            .bnav .ic{font-size:18px;display:inline;margin-right:5px}
+          }
+          @media (min-width:769px){
+            .screen{padding-left:56px;padding-right:56px}
+            .menu-grid{grid-template-columns:repeat(4,1fr)}
+            .svc{display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:12px}
+          }
+          @media (min-width:1100px){
+            .app{max-width:1400px}
+            .screen{padding-left:72px;padding-right:72px}
+            .menu-grid{grid-template-columns:repeat(4,1fr)}
+          }
+          </style>'''
+          init='''<script>
           (function(){
             if(!window.Telegram || !window.Telegram.WebApp) return;
-            const tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
-            window.BYI_TELEGRAM = {
-              initData: tg.initData || "",
-              user: tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null
-            };
+            const tg=window.Telegram.WebApp;
+            tg.ready(); tg.expand();
+            window.BYI_TELEGRAM={initData:tg.initData||'',user:tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null};
           })();
           </script>'''
 
-          changed = False
+          changed=False
           if 'https://telegram.org/js/telegram-web-app.js' not in s:
-              s = s.replace('</head>', sdk + '\n</head>', 1)
-              changed = True
+              s=s.replace('</head>',sdk+'\n</head>',1); changed=True
+          if 'telegram.js' not in s:
+              s=s.replace('</head>',bridge+'\n</head>',1); changed=True
+          if 'byi-responsive-v2' not in s:
+              s=s.replace('</head>',desktop+'\n</head>',1); changed=True
           if 'window.BYI_TELEGRAM' not in s:
-              s = s.replace('</body>', init + '\n</body>', 1)
-              changed = True
-
-          if changed:
-              p.write_text(s, encoding='utf-8')
+              s=s.replace('</body>',init+'\n</body>',1); changed=True
+          if changed: p.write_text(s,encoding='utf-8')
           PY
 
-      - name: Commit changes
+      - name: Commit patched client
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git diff --cached --quiet || git commit -m "Enable Telegram Mini App"
+          git diff --cached --quiet || git commit -m "Improve Telegram Mini App responsive layout"
           git push
