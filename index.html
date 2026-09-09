@@ -171,6 +171,7 @@ h2{font-size:17px;font-weight:700;margin-bottom:12px}
 .big-check{width:84px;height:84px;border-radius:50%;background:#dcfce7;color:var(--green);font-size:40px;display:flex;align-items:center;justify-content:center;margin:30px auto 18px;animation:pop .5s ease}
 @media(min-width:481px){.bnav{border-radius:20px 20px 0 0}}
 </style>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
 
@@ -1197,6 +1198,18 @@ window.addEventListener('load',()=>{
   },1100);
   if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 });
+</script>
+<script>
+(function(){
+  if(!window.Telegram || !window.Telegram.WebApp) return;
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+  window.BYI_TELEGRAM = {
+    initData: tg.initData || "",
+    user: tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null
+  };
+})();
 </script>
 </body>
 </html>
