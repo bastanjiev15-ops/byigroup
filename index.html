@@ -2,1529 +2,1201 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BYIGROUP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f2a5c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BYIGROUP">
+<title>BYIGROUP — Transport & Logistics</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --navy:#0f2a5c; --navy2:#1e40af; --accent:#f59e0b;
+  --bg:#f4f6fa; --card:#ffffff; --text:#0f172a; --text2:#64748b; --line:#e6eaf2;
+  --green:#16a34a; --red:#dc2626; --amber:#d97706; --blue:#2563eb; --violet:#7c3aed;
+  --r:18px; --sh:0 2px 14px rgba(15,42,92,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:#0b1220;color:var(--text);min-height:100vh}
+.app{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative;padding-bottom:calc(78px + env(safe-area-inset-bottom));box-shadow:0 0 60px rgba(0,0,0,.5)}
+.screen{display:none;padding:18px 16px 28px;animation:fade .25s ease}
+.screen.active{display:block}
+.screen.flush{padding:0}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-size:21px;font-weight:800;letter-spacing:-.2px}
+h2{font-size:17px;font-weight:700;margin-bottom:12px}
+.muted{color:var(--text2);font-size:13px;line-height:1.45}
+.hidden{display:none!important}
+.center{text-align:center}
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mb8{margin-bottom:8px}.mb16{margin-bottom:16px}
+.row{display:flex;gap:10px;align-items:center}
+.row.between{justify-content:space-between}
+.flex1{flex:1;min-width:0}
+/* ===== SPLASH ===== */
+#splash{position:fixed;inset:0;z-index:300;background:linear-gradient(160deg,#0b1220,#0f2a5c);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s;color:#fff}
+#splash.hide{opacity:0;pointer-events:none}
+#splash .mark{width:88px;height:88px;background:#fff;border-radius:24px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:30px;color:var(--navy);box-shadow:0 16px 40px rgba(0,0,0,.4);animation:pop .6s ease}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+#splash h1{color:#fff;letter-spacing:3px;margin-top:18px;font-size:24px}
+#splash p{color:#93c5fd;font-size:11px;letter-spacing:3px;margin-top:6px}
+#splash .spin{margin-top:34px;width:26px;height:26px;border:3px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+/* ===== ONBOARDING ===== */
+.ob{position:fixed;inset:0;background:rgba(11,18,32,.97);z-index:250;display:none;overflow-y:auto;padding:28px 20px;color:#fff}
+.ob.show{display:flex;flex-direction:column;justify-content:center}
+.ob .box{max-width:420px;margin:0 auto;width:100%}
+.ob .tabs2{display:flex;background:rgba(255,255,255,.1);border-radius:14px;padding:4px;margin:18px 0}
+.ob .tabs2 button{flex:1;padding:11px;border:none;border-radius:11px;background:transparent;color:#cbd5e1;font-weight:700;cursor:pointer;font-size:14px}
+.ob .tabs2 button.on{background:#fff;color:var(--navy)}
+.ob-step{display:flex;gap:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;margin-bottom:10px;align-items:flex-start;font-size:14.5px;line-height:1.45}
+.ob .n{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#0f172a;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* ===== WELCOME / AUTH ===== */
+.auth-wrap{min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(165deg,#0b1220 0%,#0f2a5c 55%,#1e40af 100%);padding:26px 22px}
+.auth-logo{display:flex;flex-direction:column;align-items:center;margin:56px 0 34px}
+.auth-logo .mark{width:80px;height:80px;background:#fff;border-radius:22px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:27px;color:var(--navy);margin-bottom:16px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.auth-logo h1{color:#fff;letter-spacing:3px;font-size:26px}
+.auth-logo p{color:#bfdbfe;font-size:13px;margin-top:8px;text-align:center;max-width:260px;line-height:1.5}
+.auth-card{background:var(--card);border-radius:22px;padding:24px 20px;box-shadow:0 16px 44px rgba(0,0,0,.35)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:6px;letter-spacing:.2px}
+.field input,.field select,.field textarea{width:100%;padding:14px 15px;border:2px solid var(--line);border-radius:13px;font-size:16px;background:#fff;outline:none;transition:border-color .2s;font-family:inherit;color:var(--text)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--navy2)}
+.field .opt{font-weight:400;color:#94a3b8}
+.btn{display:block;width:100%;padding:15px;background:var(--navy);color:#fff;border:none;border-radius:13px;font-size:16px;font-weight:700;cursor:pointer;transition:transform .12s,box-shadow .2s;text-align:center;text-decoration:none;box-shadow:0 6px 18px rgba(15,42,92,.25)}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:#fff;color:var(--navy);border:2px solid var(--navy);box-shadow:none}
+.btn.green{background:var(--green);box-shadow:0 6px 18px rgba(22,163,74,.25)}
+.btn.red{background:var(--red)}
+.btn.sm{padding:10px 14px;font-size:14px;width:auto;display:inline-block}
+.btn.block-auto{width:auto;display:inline-block}
+.link{color:var(--navy2);font-weight:700;text-decoration:none;font-size:14px}
+.langs{display:flex;gap:8px;justify-content:center;margin-top:auto;padding-top:26px}
+.langs button{padding:9px 18px;border-radius:22px;border:1.5px solid rgba(255,255,255,.35);background:transparent;color:#cbd5e1;font-weight:700;cursor:pointer;font-size:13px}
+.langs button.on{background:#fff;color:var(--navy);border-color:#fff}
+.langs.dark{margin:0;padding:0}
+.langs.dark button{border-color:var(--line);color:var(--text2)}
+.langs.dark button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* steps */
+.steps{display:flex;gap:6px;margin-bottom:20px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.steps i.on{background:var(--navy)}
+.choice{display:flex;gap:10px}
+.choice button{flex:1;padding:16px;border:2px solid var(--line);background:#fff;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;color:var(--text)}
+.choice button.on{border-color:var(--navy);background:#eef4ff;color:var(--navy)}
+/* ===== HEADER / HOME ===== */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;flex-shrink:0;cursor:pointer}
+.balance-card{background:linear-gradient(135deg,#0b1220 0%,#0f2a5c 60%,#1e40af 100%);color:#fff;border-radius:22px;padding:24px 22px;margin-bottom:16px;position:relative;overflow:hidden}
+.balance-card::after{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.06)}
+.balance-card .lbl{opacity:.75;font-size:13px}
+.balance-card .sum{font-size:36px;font-weight:800;margin:6px 0 16px;letter-spacing:-.5px}
+.balance-card .btn{background:#fff;color:var(--navy);width:auto;display:inline-block;padding:12px 24px;box-shadow:none}
+.card{background:var(--card);border-radius:var(--r);padding:17px;box-shadow:var(--sh);margin-bottom:12px}
+.card.press{cursor:pointer;transition:transform .12s}
+.card.press:active{transform:scale(.985)}
+.card .title{font-weight:700;font-size:15px}
+.badge{display:inline-block;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.st-new{background:#fef3c7;color:#92400e}.st-accepted{background:#dbeafe;color:#1d4ed8}
+.st-processing{background:#ffedd5;color:#c2410c}.st-ready{background:#ede9fe;color:#6d28d9}
+.st-done{background:#dcfce7;color:#166534}.st-cancelled{background:#fee2e2;color:#b91c1c}
+.st-pending{background:#fef9c3;color:#854d0e}
+.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mitem{background:var(--card);border-radius:15px;padding:15px 6px;text-align:center;cursor:pointer;box-shadow:var(--sh);border:2px solid transparent;transition:transform .12s}
+.mitem:active{transform:scale(.95)}
+.mitem .ic{font-size:23px;margin-bottom:6px}
+.mitem .tx{font-size:11px;font-weight:700;line-height:1.25;color:var(--text)}
+/* services */
+.svc{background:var(--card);border-radius:var(--r);padding:17px;box-shadow:var(--sh);margin-bottom:12px}
+.svc .head{display:flex;gap:13px;align-items:center;margin-bottom:10px}
+.svc .ic{width:48px;height:48px;border-radius:14px;background:#eef4ff;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0}
+.svc .price{font-weight:800;color:var(--navy);font-size:18px}
+.chip{display:inline-block;background:#f1f5f9;border-radius:9px;padding:6px 11px;font-size:12px;color:var(--text2);margin:2px 4px 2px 0;font-weight:600}
+.note{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:13px;padding:12px 14px;font-size:13px;margin-bottom:14px;line-height:1.5}
+/* list items */
+.list-item{background:var(--card);border-radius:15px;padding:15px 16px;box-shadow:var(--sh);margin-bottom:10px;cursor:pointer;transition:transform .12s}
+.list-item:active{transform:scale(.985)}
+/* timeline */
+.tl{margin-top:8px}
+.tl .tstep{display:flex;gap:13px;position:relative;padding-bottom:20px}
+.tl .tstep::before{content:'';position:absolute;left:9px;top:22px;bottom:0;width:2px;background:var(--line)}
+.tl .tstep:last-child::before{display:none}
+.tl .dot{width:20px;height:20px;border-radius:50%;background:var(--line);flex-shrink:0;z-index:1;border:3px solid #fff;box-shadow:0 0 0 2px var(--line)}
+.tl .tstep.done .dot{background:var(--green);box-shadow:0 0 0 2px #bbf7d0}
+.tl .tstep.now .dot{background:var(--navy2);box-shadow:0 0 0 2px #bfdbfe}
+.tl .tt{font-weight:700;font-size:14px}
+.tl .ts{font-size:12px;color:var(--text2)}
+/* tabs */
+.tabs{display:flex;background:#e6eaf2;border-radius:13px;padding:4px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1;padding:10px 8px;border:none;background:transparent;border-radius:10px;font-weight:700;font-size:12.5px;color:var(--text2);cursor:pointer;white-space:nowrap}
+.tabs button.on{background:#fff;color:var(--text);box-shadow:0 1px 5px rgba(0,0,0,.1)}
+/* bottom nav */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--line);display:flex;z-index:50;padding-bottom:env(safe-area-inset-bottom)}
+.bnav a{flex:1;text-align:center;padding:9px 0 8px;color:var(--text2);text-decoration:none;font-size:10px;font-weight:700}
+.bnav a.on{color:var(--navy)}
+.bnav .ic{font-size:21px;display:block;margin-bottom:2px}
+/* amounts */
+.amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.amounts button{padding:15px 6px;border-radius:13px;border:2px solid var(--line);background:#fff;font-weight:800;font-size:15px;cursor:pointer;color:var(--text)}
+.amounts button.on{border-color:var(--navy);background:#eef4ff;color:var(--navy)}
+.kaspi-box{background:linear-gradient(135deg,#e11d48,#9f1239);color:#fff;border-radius:18px;padding:20px;margin:14px 0}
+.kaspi-box .num{font-size:25px;font-weight:800;letter-spacing:.5px;margin:10px 0}
+.kaspi-box .btn{background:#fff;color:#9f1239;box-shadow:none}
+.kaspi-box .row .btn{flex:1}
+/* toast / confirm / sheet */
+.toast{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-90px);background:#0f172a;color:#fff;padding:13px 22px;border-radius:13px;font-size:14px;font-weight:600;z-index:400;transition:.3s;max-width:90%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.backdrop{position:fixed;inset:0;background:rgba(11,18,32,.55);z-index:150;opacity:0;pointer-events:none;transition:.25s}
+.backdrop.show{opacity:1;pointer-events:auto}
+.sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(105%);width:100%;max-width:480px;background:#fff;border-radius:24px 24px 0 0;z-index:160;padding:20px 18px calc(22px + env(safe-area-inset-bottom));transition:transform .3s cubic-bezier(.2,.9,.3,1);max-height:88vh;overflow-y:auto}
+.sheet.show{transform:translateX(-50%) translateY(0)}
+.sheet .grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 16px}
+.modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);background:#fff;border-radius:20px;z-index:160;padding:24px 20px;width:calc(100% - 48px);max-width:400px;opacity:0;pointer-events:none;transition:.22s}
+.modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+/* empty state */
+.empty{text-align:center;padding:44px 20px;color:var(--text2)}
+.empty .big{font-size:44px;margin-bottom:10px}
+.divider{height:1px;background:var(--line);margin:14px 0}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.kv:last-child{border:none}
+.kv .k{color:var(--text2)}
+.kv .v{font-weight:700;text-align:right}
+.profile-link{display:flex;align-items:center;gap:12px;padding:16px 2px;border-bottom:1px solid var(--line);cursor:pointer;font-weight:700;font-size:15px}
+.profile-link:last-child{border:none}
+.profile-link .arr{margin-left:auto;color:#94a3b8}
+.big-check{width:84px;height:84px;border-radius:50%;background:#dcfce7;color:var(--green);font-size:40px;display:flex;align-items:center;justify-content:center;margin:30px auto 18px;animation:pop .5s ease}
+@media(min-width:481px){.bnav{border-radius:20px 20px 0 0}}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="mark">BYI</div>
+  <h1>BYIGROUP</h1>
+  <p>TRANSPORT &amp; LOGISTICS</p>
+  <div class="spin"></div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="ob" id="onboarding">
+  <div class="box">
+    <div class="center" style="margin-bottom:6px">
+      <div style="width:72px;height:72px;background:#fff;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:25px;color:var(--navy)">BYI</div>
+      <h1 style="color:#fff;margin-top:14px" id="ob-title">Установите BYIGROUP</h1>
+      <p style="color:#94a3b8;font-size:14px;margin-top:8px" id="ob-sub">Приложение всегда под рукой — прямо на экране телефона</p>
+    </div>
+    <div class="tabs2">
+      <button id="ob-tab-ios" class="on" onclick="obTab('ios')"> iPhone</button>
+      <button id="ob-tab-and" onclick="obTab('and')"> Samsung / Android</button>
+    </div>
+    <div id="ob-ios">
+      <div class="ob-step"><div class="n">1</div><div id="ob-ios-1">Откройте сайт в браузере <b>Safari</b></div></div>
+      <div class="ob-step"><div class="n">2</div><div id="ob-ios-2">Нажмите <b>«Поделиться»</b> — квадрат со стрелкой вверх</div></div>
+      <div class="ob-step"><div class="n">3</div><div id="ob-ios-3">Прокрутите вниз и выберите <b>«На экран "Домой"»</b></div></div>
+      <div class="ob-step"><div class="n">4</div><div id="ob-ios-4">Нажмите <b>«Добавить»</b> — готово!</div></div>
+    </div>
+    <div id="ob-and" class="hidden">
+      <div class="ob-step"><div class="n">1</div><div id="ob-and-1">Нажмите <b>меню ⋮</b> в браузере (Chrome / Samsung Internet)</div></div>
+      <div class="ob-step"><div class="n">2</div><div id="ob-and-2">Выберите <b>«Установить приложение»</b> или <b>«Добавить на главный экран»</b></div></div>
+      <div class="ob-step"><div class="n">3</div><div id="ob-and-3">Нажмите <b>«Установить»</b> — готово!</div></div>
+    </div>
+    <button class="btn green mt24" id="ob-close" onclick="closeOnboarding()">Понятно</button>
+    <div class="langs" style="margin-top:20px;padding-top:0">
+      <button onclick="setLang('ru')" data-lang="ru">RU</button>
+      <button onclick="setLang('kk')" data-lang="kk">ҚАЗ</button>
+      <button onclick="setLang('en')" data-lang="en">EN</button>
+    </div>
+  </div>
+</div>
+
+<div class="app" id="app">
+
+  <!-- WELCOME -->
+  <div class="screen flush" id="s-welcome">
+    <div class="auth-wrap">
+      <div class="auth-logo">
+        <div class="mark">BYI</div>
+        <h1>BYIGROUP</h1>
+        <p data-t="slogan">Ваш надёжный партнёр в международных перевозках</p>
+      </div>
+      <div class="auth-card">
+        <button class="btn" onclick="go('s-login')" data-t="login">Войти</button>
+        <div style="height:12px"></div>
+        <button class="btn ghost" onclick="startRegister()" data-t="register">Регистрация</button>
+      </div>
+      <div class="langs">
+        <button onclick="setLang('ru')" data-lang="ru">RU</button>
+        <button onclick="setLang('kk')" data-lang="kk">ҚАЗ</button>
+        <button onclick="setLang('en')" data-lang="en">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="screen flush" id="s-login">
+    <div class="auth-wrap">
+      <div class="auth-logo" style="margin:40px 0 26px">
+        <div class="mark" style="width:64px;height:64px;font-size:22px">BYI</div>
+        <h1 style="font-size:22px">BYIGROUP</h1>
+      </div>
+      <div class="auth-card">
+        <h2 class="center mb16" data-t="login_title">Вход</h2>
+        <div class="field"><label data-t="phone">Номер телефона</label><input id="li-phone" type="tel" placeholder="+7 ___ ___ __ __" autocomplete="tel"></div>
+        <div class="field"><label data-t="password">Пароль</label><input id="li-pass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+        <div class="center mb16"><a class="link" href="#" onclick="forgotPass();return false" data-t="forgot">Забыли пароль?</a></div>
+        <button class="btn" onclick="doLogin()" data-t="login">Войти</button>
+        <div class="divider"></div>
+        <button class="btn ghost" onclick="startRegister()" data-t="register">Регистрация</button>
+      </div>
+      <div class="langs">
+        <button onclick="setLang('ru')" data-lang="ru">RU</button>
+        <button onclick="setLang('kk')" data-lang="kk">ҚАЗ</button>
+        <button onclick="setLang('en')" data-lang="en">EN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="screen" id="s-register">
+    <div class="row between mb16">
+      <a class="link" href="#" onclick="go('s-welcome');return false">← <span data-t="back">Назад</span></a>
+      <h1 data-t="register">Регистрация</h1><span style="width:56px"></span>
+    </div>
+    <div class="steps" id="reg-steps"><i class="on"></i><i></i><i></i></div>
+
+    <div id="reg-step-1">
+      <h2 data-t="step1">Личные данные</h2>
+      <div class="row"><div class="field flex1"><label data-t="first_name">Имя</label><input id="rg-fname"></div>
+      <div class="field flex1"><label data-t="last_name">Фамилия</label><input id="rg-lname"></div></div>
+      <div class="field"><label data-t="iin">ИИН</label><input id="rg-iin" type="number" inputmode="numeric" placeholder="000000000000"></div>
+      <div class="field"><label data-t="phone">Номер телефона</label><input id="rg-phone" type="tel" placeholder="+7 ___ ___ __ __"></div>
+      <div class="field"><label>Email <span class="opt" data-t="optional">(необязательно)</span></label><input id="rg-email" type="email" placeholder="mail@example.com"></div>
+      <div class="field"><label data-t="password">Пароль</label><input id="rg-pass" type="password" autocomplete="new-password"></div>
+      <div class="field"><label data-t="pass2">Подтверждение пароля</label><input id="rg-pass2" type="password" autocomplete="new-password"></div>
+    </div>
+
+    <div id="reg-step-2" class="hidden">
+      <h2 data-t="step2">Автомобиль</h2>
+      <div class="field"><label data-t="brand">Марка автомобиля</label><input id="rg-brand" placeholder="MAN, Volvo, Scania..."></div>
+      <div class="field"><label data-t="model">Модель</label><input id="rg-model" placeholder="TGX, FH16..."></div>
+      <div class="field"><label data-t="plate">Госномер</label><input id="rg-plate" placeholder="123 ABC 02"></div>
+      <div class="field"><label>VIN <span class="opt" data-t="optional">(необязательно)</span></label><input id="rg-vin" placeholder="XTA..."></div>
+    </div>
+
+    <div id="reg-step-3" class="hidden">
+      <h2 data-t="step3">Прицеп</h2>
+      <p class="muted mb16" data-t="have_trailer">У вас есть прицеп?</p>
+      <div class="choice mb16">
+        <button id="tr-yes" onclick="trailerChoice(true)"><span data-t="yes">Да</span></button>
+        <button id="tr-no" class="on" onclick="trailerChoice(false)"><span data-t="no">Нет</span></button>
+      </div>
+      <div id="trailer-fields" class="hidden">
+        <div class="field"><label data-t="trailer_type">Тип прицепа</label>
+          <select id="rg-tr-type"></select></div>
+        <div class="field"><label data-t="brand">Марка</label><input id="rg-tr-brand" placeholder="Schmitz, Krone..."></div>
+        <div class="field"><label data-t="plate">Госномер</label><input id="rg-tr-plate" placeholder="1234 ABC 02"></div>
+        <div class="field"><label>VIN <span class="opt" data-t="optional">(необязательно)</span></label><input id="rg-tr-vin"></div>
+      </div>
+    </div>
+
+    <div class="row mt16">
+      <button class="btn ghost flex1 hidden" id="reg-back" onclick="regStep(-1)" data-t="back">Назад</button>
+      <button class="btn flex1" id="reg-next" onclick="regStep(1)" data-t="next">Далее</button>
+    </div>
+    <div class="langs dark mt24">
+      <button onclick="setLang('ru')" data-lang="ru">RU</button>
+      <button onclick="setLang('kk')" data-lang="kk">ҚАЗ</button>
+      <button onclick="setLang('en')" data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <!-- REG SUCCESS -->
+  <div class="screen" id="s-reg-success">
+    <div class="center" style="padding-top:40px">
+      <div class="big-check">✓</div>
+      <h1 data-t="reg_success">Регистрация успешно завершена</h1>
+      <p class="muted mt8" data-t="reg_success_sub">Добро пожаловать в BYIGROUP</p>
+      <button class="btn mt24" onclick="go('s-home')" data-t="go_cabinet">Перейти в кабинет</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen" id="s-home">
+    <div class="topbar">
+      <div class="flex1">
+        <h1 id="home-hello">—</h1>
+        <div class="muted" id="home-vehicle"></div>
+      </div>
+      <div class="avatar" onclick="go('s-profile')" id="home-avatar">B</div>
+    </div>
+
+    <div class="balance-card">
+      <div class="lbl" data-t="my_balance">Баланс</div>
+      <div class="sum" id="home-balance">0 ₸</div>
+      <button class="btn" onclick="go('s-topup')">+ <span data-t="topup">Пополнить</span></button>
+    </div>
+
+    <div class="card press" onclick="go('s-orders')" id="home-orders-card">
+      <div class="row between">
+        <div><div class="title" data-t="my_orders">Мои заказы</div><div class="muted" id="home-orders-count">—</div></div>
+        <span class="badge st-processing" id="home-orders-badge" style="display:none"></span>
+      </div>
+    </div>
+
+    <div class="card press" onclick="go('s-vehicles')">
+      <div class="row between">
+        <div><div class="title" data-t="my_vehicles">Мои автомобили</div><div class="muted" id="home-veh-count">—</div></div>
+        <span style="font-size:22px">🚛</span>
+      </div>
+    </div>
+
+    <h2 class="mt16" data-t="sections">Разделы</h2>
+    <div class="menu-grid">
+      <div class="mitem" onclick="go('s-services')"><div class="ic">📋</div><div class="tx" data-t="services">Услуги</div></div>
+      <div class="mitem" onclick="go('s-orders')"><div class="ic">🗂</div><div class="tx" data-t="my_orders">Мои заказы</div></div>
+      <div class="mitem" onclick="go('s-topup')"><div class="ic">💰</div><div class="tx" data-t="topup">Пополнить</div></div>
+      <div class="mitem" onclick="go('s-support')"><div class="ic">💬</div><div class="tx" data-t="support">Поддержка</div></div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <div class="screen" id="s-services">
+    <h1 class="mb16" data-t="services">Услуги</h1>
+    <div class="note">🕐 <span id="svc-worktime"></span></div>
+    <div id="services-list"></div>
+  </div>
+
+  <!-- ORDER CREATE -->
+  <div class="screen" id="s-order">
+    <div class="row between mb16">
+      <a class="link" href="#" onclick="go('s-services');return false">← <span data-t="back">Назад</span></a>
+      <h1 data-t="new_order">Оформление заказа</h1><span style="width:56px"></span>
+    </div>
+    <div class="card" id="order-info"></div>
+    <div class="field"><label data-t="choose_vehicle">Выберите автомобиль</label><select id="order-vehicle" onchange="fillTrailers()"></select></div>
+    <div class="field"><label data-t="choose_trailer">Выберите прицеп</label><select id="order-trailer"></select></div>
+    <div class="field"><label data-t="comment">Комментарий <span class="opt" data-t="optional">(необязательно)</span></label><textarea id="order-comment" rows="2"></textarea></div>
+    <div class="card" id="order-calc"></div>
+    <button class="btn" id="order-pay" onclick="confirmOrder()">Подтвердить заказ</button>
+  </div>
+
+  <!-- ORDER SUCCESS -->
+  <div class="screen" id="s-order-success">
+    <div class="center" style="padding-top:30px">
+      <div class="big-check">✓</div>
+      <h1 data-t="order_success">Заказ успешно создан</h1>
+      <div class="mt16"><span class="badge st-accepted" style="font-size:13px;padding:7px 16px" id="os-status">🔵 Принят</span></div>
+      <div class="card mt24" style="text-align:left" id="os-info"></div>
+      <button class="btn" onclick="go('s-orders')" data-t="to_orders">Мои заказы</button>
+      <div style="height:10px"></div>
+      <button class="btn ghost" onclick="go('s-home')" data-t="to_home">На главную</button>
+    </div>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="screen" id="s-orders">
+    <h1 class="mb16" data-t="my_orders">Мои заказы</h1>
+    <div class="tabs" id="orders-tabs">
+      <button class="on" data-f="all" onclick="ordFilter('all',this)" data-t="tab_all">Все</button>
+      <button data-f="active" onclick="ordFilter('active',this)" data-t="tab_active">Активные</button>
+      <button data-f="done" onclick="ordFilter('done',this)" data-t="st_done">Завершён</button>
+      <button data-f="cancelled" onclick="ordFilter('cancelled',this)" data-t="st_cancelled">Отменён</button>
+    </div>
+    <div id="orders-list"></div>
+  </div>
+
+  <!-- ORDER DETAIL -->
+  <div class="screen" id="s-order-detail">
+    <div class="row between mb16">
+      <a class="link" href="#" onclick="go('s-orders');return false">← <span data-t="back">Назад</span></a>
+      <h1 id="od-num">—</h1><span style="width:56px"></span>
+    </div>
+    <div class="card" id="od-info"></div>
+    <div class="card"><div class="title mb8" data-t="status_history">История статусов</div><div class="tl" id="od-timeline"></div></div>
+  </div>
+
+  <!-- VEHICLES -->
+  <div class="screen" id="s-vehicles">
+    <h1 class="mb16" data-t="my_vehicles">Мои автомобили</h1>
+    <div id="vehicles-list"></div>
+    <button class="btn ghost" onclick="openVehicleSheet()">+ <span data-t="add_vehicle">Добавить автомобиль</span></button>
+  </div>
+
+  <!-- BALANCE -->
+  <div class="screen" id="s-balance">
+    <h1 class="mb16" data-t="balance_title">Баланс</h1>
+    <div class="balance-card">
+      <div class="lbl" data-t="current_balance">Текущий баланс</div>
+      <div class="sum" id="bal-sum">0 ₸</div>
+      <button class="btn" onclick="go('s-topup')" data-t="topup_balance">Пополнить баланс</button>
+    </div>
+    <h2 data-t="history">История операций</h2>
+    <div id="tx-list"></div>
+  </div>
+
+  <!-- TOPUP -->
+  <div class="screen" id="s-topup">
+    <h1 class="mb16" data-t="topup_title">Пополнение баланса</h1>
+    <div class="card center">
+      <div class="muted" data-t="my_balance">Баланс</div>
+      <div style="font-size:30px;font-weight:800;margin-top:4px" id="topup-balance">0 ₸</div>
+    </div>
+    <h2 data-t="choose_amount">Выберите сумму</h2>
+    <div class="amounts" id="amounts">
+      <button onclick="setAmt(5000,this)">5 000 ₸</button>
+      <button onclick="setAmt(10000,this)">10 000 ₸</button>
+      <button onclick="setAmt(20000,this)">20 000 ₸</button>
+      <button onclick="setAmt(50000,this)">50 000 ₸</button>
+      <button onclick="setAmt(100000,this)">100 000 ₸</button>
+      <button onclick="setAmt(0,this)" data-t="other">Другая сумма</button>
+    </div>
+    <div class="field hidden" id="custom-amt"><label data-t="enter_sum">Введите сумму (₸)</label><input type="number" id="amt-input" min="100" inputmode="numeric"></div>
+
+    <div class="kaspi-box">
+      <div style="font-weight:800;font-size:16px">Kaspi Gold</div>
+      <div style="font-size:13.5px;opacity:.92;margin-top:6px" data-t="kaspi_hint">Переведите необходимую сумму на Kaspi Gold:</div>
+      <div class="num" id="kaspi-number">+7 ...</div>
+      <div class="row">
+        <button class="btn sm" onclick="copyKaspi()" data-t="copy">Скопировать номер</button>
+        <button class="btn sm" onclick="openKaspi()" data-t="open_kaspi">Открыть Kaspi</button>
+      </div>
+    </div>
+
+    <p class="muted mb16" data-t="after_pay">После оплаты отправьте подтверждение платежа.</p>
+    <button class="btn green" onclick="paidKaspi()" data-t="i_paid">Я оплатил</button>
+
+    <div id="receipt-box" class="hidden mt16">
+      <div class="card">
+        <div class="field"><label data-t="your_amount">Сумма перевода (₸)</label><input type="number" id="rc-amount" inputmode="numeric"></div>
+        <div class="field"><label data-t="comment">Комментарий <span class="opt" data-t="optional">(необязательно)</span></label><input id="rc-comment"></div>
+        <div class="field"><label data-t="receipt">Подтверждение платежа (фото/чек)</label><input type="file" id="rc-file" accept="image/*,.pdf"></div>
+        <button class="btn" onclick="sendReceipt()" data-t="send_confirm">Отправить на подтверждение</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPUP PENDING -->
+  <div class="screen" id="s-topup-pending">
+    <div class="center" style="padding-top:30px">
+      <div class="big-check" style="background:#fef9c3;color:#854d0e">⏳</div>
+      <h1 data-t="wait_confirm">Ожидает подтверждения</h1>
+      <p class="muted mt8" data-t="wait_text">Запрос отправлен. Администратор подтвердит пополнение в рабочее время.</p>
+      <div class="card mt24" style="text-align:left" id="tp-info"></div>
+      <button class="btn" onclick="go('s-balance')" data-t="balance_title">Баланс</button>
+      <div style="height:10px"></div>
+      <button class="btn ghost" onclick="go('s-home')" data-t="to_home">На главную</button>
+    </div>
+  </div>
+
+  <!-- SUPPORT -->
+  <div class="screen" id="s-support">
+    <h1 class="mb16" data-t="support_title">Служба поддержки</h1>
+    <div class="card center">
+      <div style="font-size:46px">👨‍💼</div>
+      <div class="title mt8" style="font-size:17px" data-t="support_text">Есть вопросы? Мы поможем.</div>
+      <div class="muted mt8" id="support-worktime"></div>
+      <div class="mt16" style="font-size:23px;font-weight:800" id="support-phone">+7 ...</div>
+    </div>
+    <a class="btn" id="btn-call" href="#">📞 <span data-t="call">Позвонить</span></a>
+    <div style="height:10px"></div>
+    <a class="btn green" id="btn-wa" href="#" target="_blank" rel="noopener">💬 <span data-t="whatsapp">Написать в WhatsApp</span></a>
+    <div id="tg-row" class="hidden" style="margin-top:10px"><a class="btn ghost" id="btn-tg" href="#" target="_blank" rel="noopener">✈️ Telegram</a></div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="screen" id="s-profile">
+    <h1 class="mb16" data-t="profile">Профиль</h1>
+    <div class="card">
+      <div class="row"><div class="avatar" id="pf-avatar">B</div>
+      <div class="flex1"><div class="title" id="pf-name">—</div><div class="muted" id="pf-phone">—</div></div></div>
+    </div>
+    <div class="card">
+      <div class="profile-link" onclick="openEditProfile()">✏️ <span data-t="personal_data">Личные данные</span><span class="arr">›</span></div>
+      <div class="profile-link" onclick="go('s-vehicles')">🚛 <span data-t="my_vehicles">Мои автомобили</span><span class="arr">›</span></div>
+      <div class="profile-link" onclick="openPassSheet()">🔒 <span data-t="change_pass">Изменить пароль</span><span class="arr">›</span></div>
+      <div class="profile-link" onclick="togglePfLangs()">🌐 <span data-t="language">Язык</span><span class="arr" id="pf-lang-cur">RU</span></div>
+      <div id="pf-langs" class="hidden" style="padding:6px 0 12px"><div class="langs dark">
+        <button onclick="setLang('ru')" data-lang="ru">RU</button>
+        <button onclick="setLang('kk')" data-lang="kk">ҚАЗ</button>
+        <button onclick="setLang('en')" data-lang="en">EN</button>
+      </div></div>
+      <div class="profile-link" onclick="go('s-support')">💬 <span data-t="support">Поддержка</span><span class="arr">›</span></div>
+      <div class="profile-link" style="color:var(--red)" onclick="confirmLogout()">🚪 <span data-t="logout">Выйти</span><span class="arr">›</span></div>
+    </div>
+    <p class="muted center mt16" style="font-size:11.5px">BYIGROUP • Transport &amp; Logistics<br><span data-t="version">Версия</span> 2.0</p>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bnav hidden" id="bnav">
+    <a href="#" onclick="go('s-home');return false" data-s="s-home" class="on"><span class="ic">🏠</span><span data-t="nav_home">Главная</span></a>
+    <a href="#" onclick="go('s-services');return false" data-s="s-services"><span class="ic">📋</span><span data-t="nav_services">Услуги</span></a>
+    <a href="#" onclick="go('s-orders');return false" data-s="s-orders"><span class="ic">🗂</span><span data-t="nav_orders">Заказы</span></a>
+    <a href="#" onclick="go('s-balance');return false" data-s="s-balance"><span class="ic">💰</span><span data-t="nav_balance">Баланс</span></a>
+    <a href="#" onclick="go('s-profile');return false" data-s="s-profile"><span class="ic">👤</span><span data-t="nav_profile">Профиль</span></a>
+  </nav>
+</div>
+
+<!-- ADD VEHICLE SHEET -->
+<div class="backdrop" id="sheet-back" onclick="closeSheets()"></div>
+<div class="sheet" id="sheet-vehicle">
+  <div class="grab"></div>
+  <h2 data-t="add_vehicle">Добавить автомобиль</h2>
+  <div class="field"><label data-t="brand">Марка</label><input id="vh-brand" placeholder="MAN, Volvo..."></div>
+  <div class="field"><label data-t="model">Модель</label><input id="vh-model" placeholder="TGX"></div>
+  <div class="field"><label data-t="plate">Госномер</label><input id="vh-plate" placeholder="123 ABC 02"></div>
+  <div class="field"><label>VIN <span class="opt" data-t="optional">(необязательно)</span></label><input id="vh-vin"></div>
+  <div class="divider"></div>
+  <p class="muted mb8" data-t="have_trailer">У вас есть прицеп?</p>
+  <div class="choice mb16">
+    <button id="vh-tr-yes" onclick="vhTrailerChoice(true)"><span data-t="yes">Да</span></button>
+    <button id="vh-tr-no" class="on" onclick="vhTrailerChoice(false)"><span data-t="no">Нет</span></button>
+  </div>
+  <div id="vh-trailer-fields" class="hidden">
+    <div class="field"><label data-t="trailer_type">Тип прицепа</label><select id="vh-tr-type"></select></div>
+    <div class="row"><div class="field flex1"><label data-t="brand">Марка</label><input id="vh-tr-brand"></div>
+    <div class="field flex1"><label data-t="plate">Госномер</label><input id="vh-tr-plate"></div></div>
+  </div>
+  <button class="btn" onclick="saveVehicle()" data-t="save">Сохранить</button>
+</div>
+
+<!-- EDIT PROFILE SHEET -->
+<div class="sheet" id="sheet-profile">
+  <div class="grab"></div>
+  <h2 data-t="personal_data">Личные данные</h2>
+  <div class="row"><div class="field flex1"><label data-t="first_name">Имя</label><input id="ep-fname"></div>
+  <div class="field flex1"><label data-t="last_name">Фамилия</label><input id="ep-lname"></div></div>
+  <div class="field"><label>Email</label><input id="ep-email" type="email"></div>
+  <div class="field"><label data-t="iin">ИИН</label><input id="ep-iin" disabled style="background:#f1f5f9"></div>
+  <div class="field"><label data-t="phone">Телефон</label><input id="ep-phone" disabled style="background:#f1f5f9"></div>
+  <button class="btn" onclick="saveProfile()" data-t="save_changes">Сохранить изменения</button>
+</div>
+
+<!-- CHANGE PASS SHEET -->
+<div class="sheet" id="sheet-pass">
+  <div class="grab"></div>
+  <h2 data-t="change_pass">Изменить пароль</h2>
+  <div class="field"><label data-t="old_pass">Текущий пароль</label><input type="password" id="cp-old"></div>
+  <div class="field"><label data-t="new_pass">Новый пароль</label><input type="password" id="cp-new"></div>
+  <button class="btn" onclick="savePass()" data-t="save">Сохранить</button>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal" id="confirm-modal">
+  <h2 id="cf-title" class="center">—</h2>
+  <p class="muted center mt8" id="cf-text"></p>
+  <div class="row mt24">
+    <button class="btn ghost flex1" onclick="closeConfirm()" data-t="cancel">Отмена</button>
+    <button class="btn red flex1" id="cf-ok">OK</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const SUPABASE_URL = 'https://tgfyalpkmiktwoiuqlap.supabase.co';
+<script> const SUPABASE_URL = 'https://tgfyalpkmiktwoiuqlap.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_netfvVlkoMbFTTXvydOcjg_iDMqXyNE';
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
-</script>
-
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f6f8;
-  color:#111;
-}
-
-button,input,select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-.hidden{
-  display:none!important;
-}
-
-.page{
-  min-height:100vh;
-}
-
-.container{
-  width:min(1180px,calc(100% - 30px));
-  margin:0 auto;
-}
-
-header{
-  background:#111;
-  color:#fff;
-  position:sticky;
-  top:0;
-  z-index:1000;
-}
-
-.header-inner{
-  min-height:72px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-}
-
-.logo{
-  font-size:28px;
-  font-weight:800;
-  letter-spacing:1px;
-}
-
-.logo span{
-  color:#aaa;
-}
-
-.header-actions{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
-.btn{
-  border:none;
-  border-radius:10px;
-  padding:12px 18px;
-  background:#111;
-  color:#fff;
-}
-
-.btn-light{
-  background:#fff;
-  color:#111;
-  border:1px solid #ddd;
-}
-
-.btn-primary{
-  background:#111;
-  color:#fff;
-}
-
-.btn-danger{
-  background:#c62828;
-  color:#fff;
-}
-
-.btn-green{
-  background:#1b7f3a;
-  color:#fff;
-}
-
-.card{
-  background:#fff;
-  border-radius:18px;
-  padding:24px;
-  box-shadow:0 8px 30px rgba(0,0,0,.06);
-}
-
-main{
-  padding:35px 0 70px;
-}
-
-.auth-wrap{
-  min-height:calc(100vh - 72px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.auth-card{
-  width:min(520px,100%);
-}
-
-h1{
-  font-size:34px;
-  margin-bottom:12px;
-}
-
-h2{
-  font-size:26px;
-  margin-bottom:10px;
-}
-
-h3{
-  margin-bottom:10px;
-}
-
-.subtitle{
-  color:#666;
-  margin-bottom:22px;
-  line-height:1.5;
-}
-
-.form-group{
-  margin-bottom:16px;
-}
-
-label{
-  display:block;
-  margin-bottom:7px;
-  font-weight:600;
-}
-
-input,select{
-  width:100%;
-  padding:13px 14px;
-  border:1px solid #d9dce1;
-  border-radius:10px;
-  background:#fff;
-  outline:none;
-}
-
-input:focus,select:focus{
-  border-color:#111;
-}
-
-.grid{
-  display:grid;
-  gap:16px;
-}
-
-.grid-2{
-  grid-template-columns:repeat(2,minmax(0,1fr));
-}
-
-.grid-3{
-  grid-template-columns:repeat(3,minmax(0,1fr));
-}
-
-.full{
-  grid-column:1/-1;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.text-link{
-  color:#111;
-  text-decoration:underline;
-  cursor:pointer;
-}
-
-.muted{
-  color:#777;
-}
-
-.text-center{
-  text-align:center;
-}
-
-.hero{
-  padding:45px 0 20px;
-}
-
-.balance{
-  font-size:36px;
-  font-weight:800;
-  margin-top:8px;
-}
-
-.stat-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-top:20px;
-}
-
-.stat{
-  background:#fff;
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 8px 25px rgba(0,0,0,.05);
-}
-
-.stat-title{
-  color:#777;
-  margin-bottom:8px;
-}
-
-.stat-value{
-  font-size:24px;
-  font-weight:800;
-}
-
-.nav{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:20px 0;
-}
-
-.nav button{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:10px 14px;
-}
-
-.vehicle{
-  border:1px solid #e3e5e8;
-  padding:18px;
-  border-radius:14px;
-  margin-bottom:15px;
-}
-
-.badge{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:99px;
-  font-size:12px;
-  background:#eee;
-}
-
-.toast{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  background:#111;
-  color:#fff;
-  padding:14px 18px;
-  border-radius:10px;
-  opacity:0;
-  transform:translateY(20px);
-  transition:.25s;
-  z-index:5000;
-  max-width:350px;
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
-@media(max-width:800px){
-  .grid-2,
-  .grid-3,
-  .stat-grid{
-    grid-template-columns:1fr;
-  }
-
-  .header-inner{
-    min-height:62px;
-  }
-
-  .logo{
-    font-size:23px;
-  }
-
-  h1{
-    font-size:28px;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <div class="container header-inner">
-    <div class="logo">BYI<span>GROUP</span></div>
-
-    <div class="header-actions">
-      <button class="btn btn-light" id="header-login-btn" onclick="go('s-login')">
-        Войти
-      </button>
-
-      <button class="btn btn-primary hidden" id="header-logout-btn" onclick="confirmLogout()">
-        Выйти
-      </button>
-    </div>
-  </div>
-</header>
-
-<main>
-
-<!-- LOGIN -->
-<section id="s-login" class="page">
-  <div class="container auth-wrap">
-    <div class="card auth-card">
-      <h1>Вход</h1>
-      <p class="subtitle">
-        Войдите в личный кабинет BYIGROUP
-      </p>
-
-      <div class="form-group">
-        <label for="li-phone">Номер телефона</label>
-        <input
-          id="li-phone"
-          type="tel"
-          placeholder="+7 700 000 00 00"
-        >
-      </div>
-
-      <div class="form-group">
-        <label for="li-pass">Пароль</label>
-        <input
-          id="li-pass"
-          type="password"
-          placeholder="Введите пароль"
-        >
-      </div>
-
-      <div class="actions">
-        <button class="btn btn-primary" onclick="doLogin()">
-          Войти
-        </button>
-
-        <button class="btn btn-light" onclick="go('s-register')">
-          Регистрация
-        </button>
-      </div>
-
-      <div style="margin-top:18px;">
-        <span class="text-link" onclick="forgotPass()">
-          Забыли пароль?
-        </span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- REGISTER -->
-<section id="s-register" class="page hidden">
-  <div class="container auth-wrap">
-    <div class="card auth-card">
-
-      <h1>Регистрация</h1>
-      <p class="subtitle">
-        Создайте аккаунт клиента BYIGROUP
-      </p>
-
-      <div class="grid grid-2">
-
-        <div class="form-group">
-          <label for="rg-first-name">Имя</label>
-          <input id="rg-first-name" type="text" placeholder="Имя">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-last-name">Фамилия</label>
-          <input id="rg-last-name" type="text" placeholder="Фамилия">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-iin">ИИН</label>
-          <input id="rg-iin" type="text" placeholder="12 цифр">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-phone">Телефон</label>
-          <input id="rg-phone" type="tel" placeholder="+7 700 000 00 00">
-        </div>
-
-        <div class="form-group full">
-          <label for="rg-email">Email</label>
-          <input id="rg-email" type="email" placeholder="example@mail.com">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-pass">Пароль</label>
-          <input id="rg-pass" type="password" placeholder="Пароль">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-pass2">Повторите пароль</label>
-          <input id="rg-pass2" type="password" placeholder="Повторите пароль">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-brand">Марка</label>
-          <input id="rg-brand" type="text" placeholder="MAN">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-model">Модель</label>
-          <input id="rg-model" type="text" placeholder="TGX">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-plate">Номер</label>
-          <input id="rg-plate" type="text" placeholder="123 ABC 02">
-        </div>
-
-        <div class="form-group">
-          <label for="rg-vin">VIN</label>
-          <input id="rg-vin" type="text" placeholder="VIN автомобиля">
-        </div>
-
-      </div>
-
-      <div class="actions" style="margin-top:10px;">
-        <button class="btn btn-primary" onclick="doRegister()">
-          Зарегистрироваться
-        </button>
-
-        <button class="btn btn-light" onclick="go('s-login')">
-          Уже есть аккаунт
-        </button>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- REGISTER SUCCESS -->
-<section id="s-reg-success" class="page hidden">
-  <div class="container auth-wrap">
-    <div class="card auth-card text-center">
-      <h1>Регистрация успешна ✅</h1>
-      <p class="subtitle">
-        Ваш аккаунт создан.
-      </p>
-
-      <button class="btn btn-primary" onclick="go('s-home')">
-        Перейти в кабинет
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- HOME -->
-<section id="s-home" class="page hidden">
-  <div class="container">
-
-    <div class="hero">
-      <h1>
-        Добро пожаловать,
-        <span id="home-name">Клиент</span> 👋
-      </h1>
-
-      <p class="subtitle">
-        Личный кабинет BYIGROUP
-      </p>
-    </div>
-
-    <div class="card">
-      <div class="muted">
-        Баланс
-      </div>
-
-      <div class="balance" id="home-balance">
-        0 ₸
-      </div>
-    </div>
-
-    <div class="stat-grid">
-
-      <div class="stat">
-        <div class="stat-title">Телефон</div>
-        <div class="stat-value" id="home-phone">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-title">Автомобиль</div>
-        <div class="stat-value" id="home-car">—</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-title">Номер</div>
-        <div class="stat-value" id="home-plate">—</div>
-      </div>
-
-    </div>
-
-    <div class="nav">
-      <button onclick="go('s-profile')">
-        Профиль
-      </button>
-
-      <button onclick="go('s-vehicles')">
-        Машины
-      </button>
-
-      <button onclick="go('s-orders')">
-        Заказы
-      </button>
-
-      <button onclick="go('s-services')">
-        Услуги
-      </button>
-
-      <button onclick="go('s-payments')">
-        Платежи
-      </button>
-    </div>
-
-  </div>
-</section>
-
-<!-- PROFILE -->
-<section id="s-profile" class="page hidden">
-  <div class="container">
-    <div class="card">
-      <h2>Профиль</h2>
-
-      <div class="grid grid-2">
-
-        <div class="form-group">
-          <label>Имя</label>
-          <input id="pr-first-name">
-        </div>
-
-        <div class="form-group">
-          <label>Фамилия</label>
-          <input id="pr-last-name">
-        </div>
-
-        <div class="form-group">
-          <label>ИИН</label>
-          <input id="pr-iin">
-        </div>
-
-        <div class="form-group">
-          <label>Телефон</label>
-          <input id="pr-phone" readonly>
-        </div>
-
-        <div class="form-group full">
-          <label>Email</label>
-          <input id="pr-email">
-        </div>
-
-      </div>
-
-      <div class="actions">
-        <button class="btn btn-primary" onclick="saveProfile()">
-          Сохранить
-        </button>
-
-        <button class="btn btn-light" onclick="go('s-home')">
-          Назад
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- VEHICLES -->
-<section id="s-vehicles" class="page hidden">
-  <div class="container">
-    <div class="card">
-      <h2>Мои машины</h2>
-      <div id="vehicles-list"></div>
-
-      <button class="btn btn-primary" onclick="go('s-add-vehicle')">
-        + Добавить машину
-      </button>
-
-      <button class="btn btn-light" onclick="go('s-home')">
-        Назад
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- ADD VEHICLE -->
-<section id="s-add-vehicle" class="page hidden">
-  <div class="container">
-    <div class="card">
-      <h2>Добавить машину</h2>
-
-      <div class="grid grid-2">
-
-        <div class="form-group">
-          <label>Марка</label>
-          <input id="av-brand">
-        </div>
-
-        <div class="form-group">
-          <label>Модель</label>
-          <input id="av-model">
-        </div>
-
-        <div class="form-group">
-          <label>Номер</label>
-          <input id="av-plate">
-        </div>
-
-        <div class="form-group">
-          <label>VIN</label>
-          <input id="av-vin">
-        </div>
-
-      </div>
-
-      <div class="actions">
-        <button class="btn btn-primary" onclick="addVehicle()">
-          Добавить
-        </button>
-
-        <button class="btn btn-light" onclick="go('s-vehicles')">
-          Отмена
-        </button>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ORDERS -->
-<section id="s-orders" class="page hidden">
-  <div class="container">
-    <div class="card">
-      <h2>Мои заказы</h2>
-
-      <div id="orders-list">
-        <p class="muted">Заказов пока нет.</p>
-      </div>
-
-      <button class="btn btn-light" onclick="go('s-home')">
-        Назад
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section id="s-services" class="page hidden">
-  <div class="container">
-    <div class="card">
-      <h2>Услуги</h2>
-
-      <div id="services-list">
-        <p>Документы для перевозчиков</p>
-        <p style="margin-top:8px;">Дозволы</p>
-        <p style="margin-top:8px;">КАТ</p>
-        <p style="margin-top:8px;">Очередь</p>
-        <p style="margin-top:8px;">Таможенные документы</p>
-      </div>
-
-      <button class="btn btn-light" onclick="go('s-home')" style="margin-top:20px;">
-        Назад
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- PAYMENTS -->
-<section id="s-payments" class="page hidden">
-  <div class="container">
-    <div class="card">
-      <h2>Платежи</h2>
-
-      <div id="payments-list">
-        <p class="muted">
-          История платежей пока пуста.
-        </p>
-      </div>
-
-      <button class="btn btn-light" onclick="go('s-home')">
-        Назад
-      </button>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<div id="toast" class="toast"></div>
-
-<script>
-/* =========================
-   LOCAL STORAGE
-========================= */
-
-const DB = {
-  get(k,d){
-    try{
-      const v = JSON.parse(localStorage.getItem(k));
-      return v === null || v === undefined ? d : v;
-    }catch(e){
-      return d;
-    }
-  },
-
-  set(k,v){
-    localStorage.setItem(k,JSON.stringify(v));
-  }
+/* ==================== I18N ==================== */
+const I18N = {
+ru:{slogan:'Ваш надёжный партнёр в международных перевозках',login:'Войти',register:'Регистрация',login_title:'Вход',phone:'Номер телефона',password:'Пароль',forgot:'Забыли пароль?',back:'Назад',next:'Далее',step1:'Личные данные',step2:'Автомобиль',step3:'Прицеп',first_name:'Имя',last_name:'Фамилия',iin:'ИИН',optional:'(необязательно)',pass2:'Подтверждение пароля',brand:'Марка',model:'Модель',plate:'Госномер',have_trailer:'У вас есть прицеп?',yes:'Да',no:'Нет',trailer_type:'Тип прицепа',trailer_types:['Тент','Рефрижератор','Бортовой','Контейнеровоз','Цистерна','Другой'],create_acc:'Создать аккаунт',reg_success:'Регистрация успешно завершена',reg_success_sub:'Добро пожаловать в BYIGROUP',go_cabinet:'Перейти в кабинет',hello:'Добро пожаловать',my_balance:'Баланс',topup:'Пополнить',my_orders:'Мои заказы',my_vehicles:'Мои автомобили',sections:'Разделы',services:'Услуги',support:'Поддержка',profile:'Профиль',workdays:'Пн–Пт — рабочие дни • Сб–Вс — выходные',workdays_calc:'Срок считается только по рабочим дням (Сб, Вс — выходные)',work_days:'рабочих дня',order_btn:'Заказать',new_order:'Оформление заказа',choose_vehicle:'Выберите автомобиль',choose_trailer:'Выберите прицеп',no_trailer:'Без прицепа',comment:'Комментарий',cost:'Стоимость',your_balance:'Баланс',after_order:'После заказа',confirm_order:'Подтвердить заказ',insufficient:'Недостаточно средств',go_topup:'Пополнить баланс',order_success:'Заказ успешно создан',to_orders:'Мои заказы',to_home:'На главную',tab_all:'Все',tab_active:'Активные',st_new:'Новый',st_accepted:'Принят',st_processing:'В обработке',st_ready:'Документы готовы',st_done:'Завершён',st_cancelled:'Отменён',status_history:'История статусов',created:'Создан',expected:'Ожидаемый срок',until:'до',service:'Услуга',vehicle:'Автомобиль',trailer:'Прицеп',price:'Цена',status:'Статус',empty_orders:'У вас пока нет заказов',empty_vehicles:'У вас пока нет автомобилей',add_vehicle:'Добавить автомобиль',balance_title:'Баланс',current_balance:'Текущий баланс',topup_balance:'Пополнить баланс',history:'История операций',op_topup:'Пополнение',op_payment:'Оплата услуги',empty_history:'Операций пока нет',topup_title:'Пополнение баланса',choose_amount:'Выберите сумму',other:'Другая сумма',enter_sum:'Введите сумму (₸)',kaspi_hint:'Переведите необходимую сумму на Kaspi Gold:',copy:'Скопировать номер',open_kaspi:'Открыть Kaspi',after_pay:'После оплаты отправьте подтверждение платежа.',i_paid:'Я оплатил',your_amount:'Сумма перевода (₸)',receipt:'Подтверждение платежа (фото/чек)',send_confirm:'Отправить на подтверждение',wait_confirm:'Ожидает подтверждения',wait_text:'Запрос отправлен. Администратор подтвердит пополнение в рабочее время.',support_title:'Служба поддержки',support_text:'Есть вопросы? Мы поможем.',call:'Позвонить',whatsapp:'Написать в WhatsApp',personal_data:'Личные данные',change_pass:'Изменить пароль',old_pass:'Текущий пароль',new_pass:'Новый пароль',language:'Язык',logout:'Выйти',save:'Сохранить',save_changes:'Сохранить изменения',cancel:'Отмена',version:'Версия',nav_home:'Главная',nav_services:'Услуги',nav_orders:'Заказы',nav_balance:'Баланс',nav_profile:'Профиль',copied:'Номер скопирован',err_fill:'Заполните все обязательные поля',err_pass:'Пароли не совпадают',err_phone:'Этот номер уже зарегистрирован',err_login:'Неверный телефон или пароль',err_amount:'Укажите сумму',err_old_pass:'Неверный текущий пароль',saved:'Сохранено ✓',order_created:'Заказ создан ✓',topup_sent:'Запрос отправлен ✓',forgot_text:'Для восстановления пароля позвоните в поддержку',confirm_logout:'Выйти из аккаунта?',confirm_del_vehicle:'Удалить автомобиль?',active_n:'активных',ob_title:'Установите BYIGROUP',ob_sub:'Приложение всегда под рукой — прямо на экране телефона',ob_close:'Понятно',pass_changed:'Пароль изменён ✓',blocked:'Ваш аккаунт заблокирован. Обратитесь в поддержку.'},
+kk:{slogan:'Халықаралық тасымалдардағы сенімді серігіңіз',login:'Кіру',register:'Тіркелу',login_title:'Кіру',phone:'Телефон нөмірі',password:'Құпия сөз',forgot:'Құпия сөзді ұмыттыңыз ба?',back:'Артқа',next:'Әрі қарай',step1:'Жеке деректер',step2:'Көлік',step3:'Тіркеме',first_name:'Аты',last_name:'Тегі',iin:'ЖСН',optional:'(міндетті емес)',pass2:'Құпия сөзді растау',brand:'Марка',model:'Модель',plate:'Мем. нөмір',have_trailer:'Тіркемеңіз бар ма?',yes:'Иә',no:'Жоқ',trailer_type:'Тіркеме түрі',trailer_types:['Тент','Рефрижератор','Борттық','Контейнер тасымалдағыш','Цистерна','Басқа'],create_acc:'Аккаунт құру',reg_success:'Тіркеу сәтті аяқталды',reg_success_sub:'BYIGROUP-қа қош келдіңіз',go_cabinet:'Кабинетке өту',hello:'Қош келдіңіз',my_balance:'Баланс',topup:'Толықтыру',my_orders:'Менің тапсырыстарым',my_vehicles:'Менің көліктерім',sections:'Бөлімдер',services:'Қызметтер',support:'Қолдау',profile:'Профиль',workdays:'Дс–Жм — жұмыс күндері • Сб–Жс — демалыс',workdays_calc:'Мерзім тек жұмыс күндерімен есептеледі (Сб, Жс — демалыс)',work_days:'жұмыс күні',order_btn:'Тапсырыс беру',new_order:'Тапсырыс рәсімдеу',choose_vehicle:'Көлікті таңдаңыз',choose_trailer:'Тіркемені таңдаңыз',no_trailer:'Тіркемесіз',comment:'Пікір',cost:'Құны',your_balance:'Баланс',after_order:'Тапсырыстан кейін',confirm_order:'Тапсырысты растау',insufficient:'Қаражат жеткіліксіз',go_topup:'Балансты толықтыру',order_success:'Тапсырыс сәтті жасалды',to_orders:'Менің тапсырыстарым',to_home:'Басты бетке',tab_all:'Барлығы',tab_active:'Белсенді',st_new:'Жаңа',st_accepted:'Қабылданды',st_processing:'Өңделуде',st_ready:'Құжаттар дайын',st_done:'Аяқталды',st_cancelled:'Бас тартылды',status_history:'Мәртебе тарихы',created:'Жасалды',expected:'Күтілетін мерзім',until:'дейін',service:'Қызмет',vehicle:'Көлік',trailer:'Тіркеме',price:'Баға',status:'Мәртебе',empty_orders:'Әзірге тапсырыстарыңыз жоқ',empty_vehicles:'Әзірге көліктеріңіз жоқ',add_vehicle:'Көлік қосу',balance_title:'Баланс',current_balance:'Ағымдағы баланс',topup_balance:'Балансты толықтыру',history:'Операциялар тарихы',op_topup:'Толықтыру',op_payment:'Қызмет төлемі',empty_history:'Әзірге операциялар жоқ',topup_title:'Балансты толықтыру',choose_amount:'Соманы таңдаңыз',other:'Басқа сома',enter_sum:'Соманы енгізіңіз (₸)',kaspi_hint:'Қажетті соманы Kaspi Gold-қа аударыңыз:',copy:'Нөмірді көшіру',open_kaspi:'Kaspi ашу',after_pay:'Төлемнен кейін төлем растамасын жіберіңіз.',i_paid:'Мен төледім',your_amount:'Аударым сомасы (₸)',receipt:'Төлем растамасы (фото/чек)',send_confirm:'Растауға жіберу',wait_confirm:'Расталуын күтуде',wait_text:'Сұраныс жіберілді. Әкімші жұмыс уақытында растайды.',support_title:'Қолдау қызметі',support_text:'Сұрақтарыңыз бар ма? Біз көмектесеміз.',call:'Қоңырау шалу',whatsapp:'WhatsApp-қа жазу',personal_data:'Жеке деректер',change_pass:'Құпия сөзді өзгерту',old_pass:'Ағымдағы құпия сөз',new_pass:'Жаңа құпия сөз',language:'Тіл',logout:'Шығу',save:'Сақтау',save_changes:'Өзгерістерді сақтау',cancel:'Бас тарту',version:'Нұсқа',nav_home:'Басты',nav_services:'Қызметтер',nav_orders:'Тапсырыс',nav_balance:'Баланс',nav_profile:'Профиль',copied:'Нөмір көшірілді',err_fill:'Барлық міндетті өрістерді толтырыңыз',err_pass:'Құпия сөздер сәйкес емес',err_phone:'Бұл нөмір тіркелген',err_login:'Телефон немесе құпия сөз қате',err_amount:'Соманы көрсетіңіз',err_old_pass:'Ағымдағы құпия сөз қате',saved:'Сақталды ✓',order_created:'Тапсырыс жасалды ✓',topup_sent:'Сұраныс жіберілді ✓',forgot_text:'Құпия сөзді қалпына келтіру үшін қолдау қызметіне хабарласыңыз',confirm_logout:'Аккаунттан шығу керек пе?',confirm_del_vehicle:'Көлікті жою керек пе?',active_n:'белсенді',ob_title:'BYIGROUP орнатыңыз',ob_sub:'Қолданба әрқашан қасыңызда — телефон экранында',ob_close:'Түсінікті',pass_changed:'Құпия сөз өзгертілді ✓',blocked:'Аккаунтыңыз бұғатталған. Қолдау қызметіне хабарласыңыз.'},
+en:{slogan:'Your reliable partner in international transportation',login:'Sign in',register:'Sign up',login_title:'Sign in',phone:'Phone number',password:'Password',forgot:'Forgot password?',back:'Back',next:'Next',step1:'Personal information',step2:'Vehicle',step3:'Trailer',first_name:'First name',last_name:'Last name',iin:'IIN (ID number)',optional:'(optional)',pass2:'Confirm password',brand:'Brand',model:'Model',plate:'License plate',have_trailer:'Do you have a trailer?',yes:'Yes',no:'No',trailer_type:'Trailer type',trailer_types:['Curtain side','Refrigerated','Flatbed','Container carrier','Tanker','Other'],create_acc:'Create account',reg_success:'Registration completed successfully',reg_success_sub:'Welcome to BYIGROUP',go_cabinet:'Go to dashboard',hello:'Welcome',my_balance:'Balance',topup:'Top up',my_orders:'My orders',my_vehicles:'My vehicles',sections:'Sections',services:'Services',support:'Support',profile:'Profile',workdays:'Mon–Fri — working days • Sat–Sun — days off',workdays_calc:'Processing time counts working days only (Sat, Sun — days off)',work_days:'business days',order_btn:'Order',new_order:'New order',choose_vehicle:'Choose vehicle',choose_trailer:'Choose trailer',no_trailer:'No trailer',comment:'Comment',cost:'Cost',your_balance:'Balance',after_order:'After order',confirm_order:'Confirm order',insufficient:'Insufficient funds',go_topup:'Top up balance',order_success:'Order created successfully',to_orders:'My orders',to_home:'Home',tab_all:'All',tab_active:'Active',st_new:'New',st_accepted:'Accepted',st_processing:'Processing',st_ready:'Documents ready',st_done:'Completed',st_cancelled:'Cancelled',status_history:'Status history',created:'Created',expected:'Expected date',until:'by',service:'Service',vehicle:'Vehicle',trailer:'Trailer',price:'Price',status:'Status',empty_orders:'You have no orders yet',empty_vehicles:'You have no vehicles yet',add_vehicle:'Add vehicle',balance_title:'Balance',current_balance:'Current balance',topup_balance:'Top up balance',history:'Transaction history',op_topup:'Top-up',op_payment:'Service payment',empty_history:'No transactions yet',topup_title:'Balance top-up',choose_amount:'Choose amount',other:'Other amount',enter_sum:'Enter amount (₸)',kaspi_hint:'Transfer the required amount to Kaspi Gold:',copy:'Copy number',open_kaspi:'Open Kaspi',after_pay:'After payment, send the payment confirmation.',i_paid:'I have paid',your_amount:'Transfer amount (₸)',receipt:'Payment confirmation (photo/receipt)',send_confirm:'Send for confirmation',wait_confirm:'Pending confirmation',wait_text:'Request sent. The administrator will confirm the top-up during working hours.',support_title:'Support',support_text:'Have questions? We will help.',call:'Call',whatsapp:'Write on WhatsApp',personal_data:'Personal information',change_pass:'Change password',old_pass:'Current password',new_pass:'New password',language:'Language',logout:'Log out',save:'Save',save_changes:'Save changes',cancel:'Cancel',version:'Version',nav_home:'Home',nav_services:'Services',nav_orders:'Orders',nav_balance:'Balance',nav_profile:'Profile',copied:'Number copied',err_fill:'Please fill in all required fields',err_pass:'Passwords do not match',err_phone:'This number is already registered',err_login:'Wrong phone or password',err_amount:'Enter the amount',err_old_pass:'Wrong current password',saved:'Saved ✓',order_created:'Order created ✓',topup_sent:'Request sent ✓',forgot_text:'To reset your password, please call support',confirm_logout:'Log out of your account?',confirm_del_vehicle:'Delete this vehicle?',active_n:'active',ob_title:'Install BYIGROUP',ob_sub:'The app is always at hand — right on your phone screen',ob_close:'Got it',pass_changed:'Password changed ✓',blocked:'Your account is blocked. Please contact support.'}
 };
-
-function users(){
-  return DB.get('byi2_users',[]);
+let LANG = localStorage.getItem('byi2_lang') || 'ru';
+function T(k){ return (I18N[LANG] && I18N[LANG][k]) !== undefined ? I18N[LANG][k] : (I18N.ru[k] !== undefined ? I18N.ru[k] : k); }
+function setLang(l){ LANG=l; localStorage.setItem('byi2_lang',l); applyLang(); renderAll(); }
+function applyLang(){
+  document.querySelectorAll('[data-t]').forEach(el=>{ el.textContent=T(el.getAttribute('data-t')); });
+  document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on', b.dataset.lang===LANG));
+  const cur=document.getElementById('pf-lang-cur'); if(cur) cur.textContent=LANG==='kk'?'ҚАЗ':LANG.toUpperCase();
+  fillTrailerTypes();
+}
+function fillTrailerTypes(){
+  ['rg-tr-type','vh-tr-type'].forEach(id=>{
+    const sel=document.getElementById(id); if(!sel) return;
+    const val=sel.value; sel.innerHTML='';
+    T('trailer_types').forEach((tt,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=tt; sel.appendChild(o); });
+    sel.value=val||'0';
+  });
 }
 
-function saveUsers(arr){
-  DB.set('byi2_users',arr);
+/* ==================== STORE ==================== */
+function defSettings(){ return {
+  companyName:'BYIGROUP',
+  kaspiPhone:'+7 778 000 1558',
+  supportPhone:'+7 700 158 2006',
+  whatsapp:'77001582006',
+  telegram:'',
+  email:'',
+  workDays:{ru:'Пн–Пт — рабочие дни',kk:'Дс–Жм — жұмыс күндері',en:'Mon–Fri — working days'},
+  daysOff:{ru:'Сб–Вс — выходные',kk:'Сб–Жс — демалыс',en:'Sat–Sun — days off'},
+  defaultDays:'1-2',
+  services:[
+    {id:'kat',icon:'📄',name:{ru:'КАТ',kk:'КАТ',en:'KAT'},desc:{ru:'Оформление документации КАТ для международных перевозок',kk:'Халықаралық тасымалдарға КАТ құжаттарын рәсімдеу',en:'KAT documentation for international transportation'},price:5000,days:'1-2',active:true},
+    {id:'dozvol',icon:'🇨🇳',name:{ru:'Дозвол',kk:'Дозвол',en:'Dozvol'},desc:{ru:'Оформление разрешения на международные перевозки',kk:'Халықаралық тасымалдарға рұқсат рәсімдеу',en:'Permit for international transportation'},price:5000,days:'1-2',active:true},
+    {id:'queue_cn',icon:'🚛',name:{ru:'Очередь Китай',kk:'Қытай кезегі',en:'China queue'},desc:{ru:'Регистрация и управление очередью в Китай',kk:'Қытай кезегіне тіркеу және басқару',en:'China queue registration and management'},price:5000,days:'1-2',active:true},
+    {id:'queue_ru',icon:'🇷🇺',name:{ru:'Очередь Россия',kk:'Ресей кезегі',en:'Russia queue'},desc:{ru:'Регистрация и управление очередью в Россию',kk:'Ресей кезегіне тіркеу және басқару',en:'Russia queue registration and management'},price:5000,days:'1-2',active:true},
+    {id:'customs',icon:'🛃',name:{ru:'Таможенные документы',kk:'Кедендік құжаттар',en:'Customs documents'},desc:{ru:'Обработка и сопровождение таможенной документации',kk:'Кедендік құжаттарды өңдеу және сүйемелдеу',en:'Processing and support of customs documentation'},price:8000,days:'1-2',active:true},
+    {id:'balance',icon:'🚚',name:{ru:'Постановка авто на баланс',kk:'Көлікті балансқа қою',en:'Vehicle on company balance'},desc:{ru:'Постановка автомобиля на баланс компании BYIGROUP',kk:'Көлікті BYIGROUP компаниясының балансына қою',en:'Placing a vehicle on BYIGROUP company balance'},price:25000,days:'1-2',active:true},
+    {id:'cargo',icon:'📋',name:{ru:'Cargo Ruqsat',kk:'Cargo Ruqsat',en:'Cargo Ruqsat'},desc:{ru:'Регистрация и сопровождение Cargo Ruqsat',kk:'Cargo Ruqsat тіркеу және сүйемелдеу',en:'Cargo Ruqsat registration and support'},price:12000,days:'1-2',active:true},
+    {id:'other',icon:'📑',name:{ru:'Другие услуги',kk:'Басқа қызметтер',en:'Other services'},desc:{ru:'Дополнительные логистические и документные услуги',kk:'Қосымша логистикалық және құжаттық қызметтер',en:'Additional logistics and document services'},price:5000,days:'1-2',active:true}
+  ]
+};}
+const DB={
+  get(k,d){ try{ const v=JSON.parse(localStorage.getItem(k)); return v===null||v===undefined?d:v; }catch(e){ return d; } },
+  set(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
+};
+function settings(){ return DB.get('byi2_settings', defSettings()); }
+function saveSettings(s){ DB.set('byi2_settings',s); }
+if(!localStorage.getItem('byi2_settings')) saveSettings(defSettings());
+function users(){ return DB.get('byi2_users',[]); }
+function saveUsers(u){ DB.set('byi2_users',u); }
+function orders(){ return DB.get('byi2_orders',[]); }
+function saveOrders(o){ DB.set('byi2_orders',o); }
+function txs(){ return DB.get('byi2_tx',[]); }
+function saveTxs(t){ DB.set('byi2_tx',t); }
+function payments(){ return DB.get('byi2_payments',[]); }
+function savePayments(p){ DB.set('byi2_payments',p); }
+function session(){ return DB.get('byi2_session',null); }
+function currentUser(){ const s=session(); if(!s) return null; return users().find(u=>u.phone===s.phone)||null; }
+function updateUser(u){
+  const us=users(); const i=us.findIndex(x=>x.phone===u.phone);
+  if(i>=0) us[i]=u; else us.push(u);
+  saveUsers(us);
+}
+function fmt(n){ return (n||0).toLocaleString('ru-RU')+' ₸'; }
+function fmtDate(d){ return new Date(d).toLocaleDateString(LANG==='en'?'en-GB':'ru-RU',{day:'numeric',month:'long'}); }
+function fmtDateTime(d){ return new Date(d).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+/* срок с учётом выходных */
+function addBusinessDays(from,n){
+  let d=new Date(from); let added=0;
+  while(added<n){ d.setDate(d.getDate()+1); const day=d.getDay(); if(day!==0&&day!==6) added++; }
+  return d;
+}
+function deadlineText(created,daysStr){
+  const m=(daysStr||'1-2').match(/(\d+)\s*[-–]?\s*(\d+)?/);
+  const max=parseInt(m[2]||m[1]||'2');
+  return fmtDate(addBusinessDays(created,max));
 }
 
-function currentSession(){
-  return DB.get('byi2_session',null);
-}
-
-function currentUser(){
-  const session=currentSession();
-
-  if(!session || !session.phone){
-    return null;
-  }
-
-  return users().find(x=>x.phone===session.phone) || null;
-}
-
-function updateUser(user){
-  const arr=users();
-  const index=arr.findIndex(x=>x.phone===user.phone);
-
-  if(index===-1){
-    arr.push(user);
-  }else{
-    arr[index]=user;
-  }
-
-  saveUsers(arr);
-}
-
-
-/* =========================
-   NAVIGATION
-========================= */
-
-const pages=[
-  's-login',
-  's-register',
-  's-reg-success',
-  's-home',
-  's-profile',
-  's-vehicles',
-  's-add-vehicle',
-  's-orders',
-  's-services',
-  's-payments'
-];
-
+/* ==================== NAV ==================== */
 function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const authScreens=['s-welcome','s-login','s-register','s-reg-success'];
+  document.getElementById('bnav').classList.toggle('hidden', authScreens.includes(id));
+  document.querySelectorAll('.bnav a').forEach(a=>a.classList.toggle('on', a.dataset.s===id));
+  window.scrollTo(0,0);
+  renderAll();
+}
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove('show'),2600); }
+/* confirm */
+let cfCb=null;
+function askConfirm(title,text,cb){
+  document.getElementById('cf-title').textContent=title;
+  document.getElementById('cf-text').textContent=text||'';
+  cfCb=cb;
+  document.getElementById('confirm-modal').classList.add('show');
+  document.getElementById('sheet-back').classList.add('show');
+}
+function closeConfirm(){ document.getElementById('confirm-modal').classList.remove('show'); document.getElementById('sheet-back').classList.remove('show'); cfCb=null; }
+document.getElementById('cf-ok').onclick=()=>{ const cb=cfCb; closeConfirm(); if(cb) cb(); };
+/* sheets */
+function openSheet(id){ closeSheets(); document.getElementById(id).classList.add('show'); document.getElementById('sheet-back').classList.add('show'); }
+function closeSheets(){ document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('show')); document.getElementById('confirm-modal').classList.remove('show'); document.getElementById('sheet-back').classList.remove('show'); }
 
-  pages.forEach(p=>{
-    const el=document.getElementById(p);
+/* ==================== ONBOARDING ==================== */
+function obTab(t){
+  document.getElementById('ob-ios').classList.toggle('hidden', t!=='ios');
+  document.getElementById('ob-and').classList.toggle('hidden', t!=='and');
+  document.getElementById('ob-tab-ios').classList.toggle('on', t==='ios');
+  document.getElementById('ob-tab-and').classList.toggle('on', t==='and');
+}
+function closeOnboarding(){ localStorage.setItem('byi2_ob','1'); document.getElementById('onboarding').classList.remove('show'); }
 
-    if(el){
-      el.classList.toggle('hidden',p!==id);
+/* ==================== AUTH ==================== */
+function startRegister(){ regStepN=1; showRegStep(); go('s-register'); }
+let regStepN=1, hasTrailer=false;
+function trailerChoice(v){ hasTrailer=v;
+  document.getElementById('tr-yes').classList.toggle('on',v);
+  document.getElementById('tr-no').classList.toggle('on',!v);
+  document.getElementById('trailer-fields').classList.toggle('hidden',!v);
+}
+function showRegStep(){
+  [1,2,3].forEach(n=>document.getElementById('reg-step-'+n).classList.toggle('hidden', n!==regStepN));
+  document.querySelectorAll('#reg-steps i').forEach((el,i)=>el.classList.toggle('on', i<regStepN));
+  document.getElementById('reg-back').classList.toggle('hidden', regStepN===1);
+  document.getElementById('reg-next').textContent = regStepN===3 ? T('create_acc') : T('next');
+}
+function regStep(d){
+  if(d>0){
+    const req={1:['rg-fname','rg-lname','rg-iin','rg-phone','rg-pass','rg-pass2'],2:['rg-brand','rg-model','rg-plate'],3:[]}[regStepN];
+    for(const id of req){ const el=document.getElementById(id); if(!el.value.trim()){ toast(T('err_fill')); el.focus(); return; } }
+    if(regStepN===1){
+      if(document.getElementById('rg-pass').value!==document.getElementById('rg-pass2').value){ toast(T('err_pass')); return; }
     }
+    if(regStepN===3){
+      if(hasTrailer){ if(!document.getElementById('rg-tr-brand').value.trim()||!document.getElementById('rg-tr-plate').value.trim()){ toast(T('err_fill')); return; } }
+      doRegister(); return;
+    }
+  }
+  regStepN=Math.min(3,Math.max(1,regStepN+d));
+  showRegStep();
+}
+async function doRegister(){
+  const phone = document.getElementById('rg-phone').value.trim();
+
+  const trailers = [];
+  if(hasTrailer){
+    trailers.push({
+      type: parseInt(document.getElementById('rg-tr-type').value || '0'),
+      brand: document.getElementById('rg-tr-brand').value.trim(),
+      plate: document.getElementById('rg-tr-plate').value.trim(),
+      vin: document.getElementById('rg-tr-vin').value.trim()
+    });
+  }
+
+  const firstName = document.getElementById('rg-fname').value.trim();
+  const lastName = document.getElementById('rg-lname').value.trim();
+  const iin = document.getElementById('rg-iin').value.trim();
+  const email = document.getElementById('rg-email').value.trim();
+  const password = document.getElementById('rg-pass').value;
+  const brand = document.getElementById('rg-brand').value.trim();
+  const model = document.getElementById('rg-model').value.trim();
+  const plate = document.getElementById('rg-plate').value.trim();
+  const vin = document.getElementById('rg-vin').value.trim();
+
+  const { data: regOk, error } = await supabaseClient.rpc('byi_client_register', {
+    p_first_name: firstName,
+    p_last_name: lastName,
+    p_iin: iin,
+    p_phone: phone,
+    p_email: email || null,
+    p_password: password,
+    p_brand: brand,
+    p_model: model,
+    p_plate: plate,
+    p_vin: vin
   });
 
-  updateHeader();
-
-  if(id==='s-home'){
-    renderHome();
-  }
-
-  if(id==='s-profile'){
-    renderProfile();
-  }
-
-  if(id==='s-vehicles'){
-    renderVehicles();
-  }
-
-  if(id==='s-orders'){
-    renderOrders();
-  }
-
-  if(id==='s-payments'){
-    renderPayments();
-  }
-}
-
-
-/* =========================
-   TOAST
-========================= */
-
-let toastTimer=null;
-
-function toast(message){
-
-  const el=document.getElementById('toast');
-
-  el.textContent=message;
-  el.classList.add('show');
-
-  clearTimeout(toastTimer);
-
-  toastTimer=setTimeout(()=>{
-    el.classList.remove('show');
-  },3000);
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
-function updateHeader(){
-
-  const user=currentUser();
-
-  const loginBtn=document.getElementById('header-login-btn');
-  const logoutBtn=document.getElementById('header-logout-btn');
-
-  if(user){
-
-    loginBtn.classList.add('hidden');
-    logoutBtn.classList.remove('hidden');
-
-  }else{
-
-    loginBtn.classList.remove('hidden');
-    logoutBtn.classList.add('hidden');
-
-  }
-}
-
-
-/* =========================
-   REGISTER
-========================= */
-
-async function doRegister(){
-
-  const firstName=document.getElementById('rg-first-name').value.trim();
-  const lastName=document.getElementById('rg-last-name').value.trim();
-  const iin=document.getElementById('rg-iin').value.trim();
-  const phone=document.getElementById('rg-phone').value.trim();
-  const email=document.getElementById('rg-email').value.trim();
-
-  const password=document.getElementById('rg-pass').value;
-  const password2=document.getElementById('rg-pass2').value;
-
-  const brand=document.getElementById('rg-brand').value.trim();
-  const model=document.getElementById('rg-model').value.trim();
-  const plate=document.getElementById('rg-plate').value.trim();
-  const vin=document.getElementById('rg-vin').value.trim();
-
-  if(
-    !firstName ||
-    !lastName ||
-    !iin ||
-    !phone ||
-    !password ||
-    !password2 ||
-    !brand ||
-    !model ||
-    !plate ||
-    !vin
-  ){
-    toast('Заполните все обязательные поля');
-    return;
-  }
-
-  if(password!==password2){
-    toast('Пароли не совпадают');
-    return;
-  }
-
-  if(password.length<6){
-    toast('Пароль должен содержать минимум 6 символов');
-    return;
-  }
-
-  const {data:regOk,error}=await supabaseClient.rpc(
-    'byi_client_register',
-    {
-      p_first_name:firstName,
-      p_last_name:lastName,
-      p_iin:iin,
-      p_phone:phone,
-      p_email:email || null,
-      p_password:password,
-      p_brand:brand,
-      p_model:model,
-      p_plate:plate,
-      p_vin:vin
-    }
-  );
-
   if(error){
-
     console.error(error);
-
-    toast(
-      'Ошибка регистрации: ' +
-      (error.message || 'Неизвестная ошибка')
-    );
-
+    toast('Ошибка регистрации: ' + (error.message || 'Неизвестная ошибка'));
     return;
   }
 
-  if(regOk!==true){
-
-    toast('Этот номер телефона уже зарегистрирован');
-
+  if(regOk !== true){
+    toast(T('err_phone'));
     return;
   }
 
-  const user={
-    firstName:firstName,
-    lastName:lastName,
-    iin:iin,
-    phone:phone,
-    email:email,
-    password:password,
-    balance:0,
-    blocked:false,
-    vehicles:[
-      {
-        brand:brand,
-        model:model,
-        plate:plate,
-        vin:vin,
-        trailers:[]
-      }
-    ],
-    created:new Date().toISOString()
+  const user = {
+    firstName,
+    lastName,
+    iin,
+    phone,
+    email,
+    password,
+    balance: 0,
+    blocked: false,
+    vehicles: [{brand, model, plate, vin, trailers}],
+    created: new Date().toISOString()
   };
 
   updateUser(user);
-
-  DB.set(
-    'byi2_session',
-    {
-      phone:phone
-    }
-  );
-
+  DB.set('byi2_session', {phone});
   go('s-reg-success');
 }
 
-
-/* =========================
-   LOGIN
-========================= */
-
 async function doLogin(){
-
-  const phone=document.getElementById('li-phone').value.trim();
-  const pass=document.getElementById('li-pass').value;
+  const phone = document.getElementById('li-phone').value.trim();
+  const pass = document.getElementById('li-pass').value;
 
   if(!phone || !pass){
-
-    toast('Введите номер телефона и пароль');
-
+    toast(T('err_login'));
     return;
   }
 
-  const {
-    data,
-    error
-  } = await supabaseClient.rpc(
-    'byi_client_login',
-    {
-      p_phone:phone,
-      p_password:pass
-    }
-  );
+  const { data, error } = await supabaseClient.rpc('byi_client_login', {
+    p_phone: phone,
+    p_password: pass
+  });
 
   if(error){
-
     console.error(error);
-
-    toast(
-      'Ошибка входа: ' +
-      (error.message || 'Неизвестная ошибка')
-    );
-
+    toast('Ошибка входа: ' + (error.message || 'Неизвестная ошибка'));
     return;
   }
 
-  const u=Array.isArray(data) ? data[0] : data;
+  const u = Array.isArray(data) ? data[0] : data;
 
   if(!u){
-
-    toast('Неверный номер телефона или пароль');
-
+    toast(T('err_login'));
     return;
   }
 
   if(u.blocked){
-
-    toast('Ваш аккаунт заблокирован');
-
+    toast(T('blocked'));
     return;
   }
 
-  const oldLocal=
-    users().find(x=>x.phone===u.phone) || {};
-
-  const user={
-    firstName:u.first_name || oldLocal.firstName || '',
-    lastName:u.last_name || oldLocal.lastName || '',
-    iin:u.iin || oldLocal.iin || '',
-    phone:u.phone,
-    email:u.email || oldLocal.email || '',
-
-    password:pass,
-
-    balance:Number(u.balance || 0),
-
-    blocked:!!u.blocked,
-
-    vehicles:
-      oldLocal.vehicles &&
-      oldLocal.vehicles.length
-      ? oldLocal.vehicles
-      : [
-        {
-          brand:u.brand || '',
-          model:u.model || '',
-          plate:u.plate || '',
-          vin:u.vin || '',
-          trailers:[]
-        }
-      ],
-
-    created:
-      oldLocal.created ||
-      new Date().toISOString()
+  const oldLocal = users().find(x => x.phone === u.phone) || {};
+  const user = {
+    firstName: u.first_name || oldLocal.firstName || '',
+    lastName: u.last_name || oldLocal.lastName || '',
+    iin: u.iin || oldLocal.iin || '',
+    phone: u.phone,
+    email: u.email || oldLocal.email || '',
+    password: pass,
+    balance: Number(u.balance || 0),
+    blocked: !!u.blocked,
+    vehicles: oldLocal.vehicles && oldLocal.vehicles.length ? oldLocal.vehicles : [{
+      brand: u.brand || '',
+      model: u.model || '',
+      plate: u.plate || '',
+      vin: u.vin || '',
+      trailers: []
+    }],
+    created: oldLocal.created || new Date().toISOString()
   };
 
   updateUser(user);
-
-  DB.set(
-    'byi2_session',
-    {
-      phone:phone
-    }
-  );
-
+  DB.set('byi2_session', {phone});
   go('s-home');
 }
-
-
-/* =========================
-   FORGOT PASSWORD
-========================= */
 
 function forgotPass(){
+  toast(T('forgot_text') + ': ' + settings().supportPhone);
+}
 
-  const phone=
-    document.getElementById('li-phone').value.trim();
-
-  if(!phone){
-
-    toast('Сначала введите номер телефона');
-
-    return;
-  }
-
-  toast(
-    'Для восстановления пароля обратитесь в BYIGROUP'
+function confirmLogout(){
+  askConfirm(
+    T('logout'),
+    T('confirm_logout'),
+    ()=>{
+      localStorage.removeItem('byi2_session');
+      go('s-welcome');
+    }
   );
 }
 
-
-/* =========================
-   LOGOUT
-========================= */
-
-function confirmLogout(){
-
-  const ok=
-    confirm('Вы действительно хотите выйти?');
-
-  if(!ok){
-    return;
-  }
-
-  localStorage.removeItem('byi2_session');
-
-  go('s-login');
-
-  toast('Вы вышли из аккаунта');
+/* ==================== RENDER ==================== */
+function renderAll(){
+  const s=settings();
+  document.getElementById('kaspi-number').textContent=s.kaspiPhone;
+  document.getElementById('support-phone').textContent=s.supportPhone;
+  document.getElementById('btn-call').href='tel:'+s.supportPhone.replace(/[\s-]/g,'');
+  document.getElementById('btn-wa').href='https://wa.me/'+String(s.whatsapp).replace(/\D/g,'');
+  const wt=(s.workDays&&s.workDays[LANG]||s.workDays.ru)+' • '+(s.daysOff&&s.daysOff[LANG]||s.daysOff.ru);
+  document.getElementById('svc-worktime').textContent=wt;
+  document.getElementById('support-worktime').textContent=wt;
+  if(s.telegram){ document.getElementById('tg-row').classList.remove('hidden'); document.getElementById('btn-tg').href='https://t.me/'+s.telegram.replace('@',''); }
+  else document.getElementById('tg-row').classList.add('hidden');
+  const u=currentUser();
+  if(!u) return;
+  const name=u.firstName+' '+(u.lastName||'');
+  document.getElementById('home-hello').textContent=T('hello')+', '+u.firstName+' 👋';
+  document.getElementById('home-avatar').textContent=(u.firstName[0]||'B').toUpperCase();
+  const v=(u.vehicles||[])[0];
+  document.getElementById('home-vehicle').textContent=v? (v.brand+' '+v.model+' • '+v.plate):'';
+  document.getElementById('home-balance').textContent=fmt(u.balance);
+  document.getElementById('bal-sum').textContent=fmt(u.balance);
+  document.getElementById('topup-balance').textContent=fmt(u.balance);
+  const myOrders=orders().filter(o=>o.userPhone===u.phone);
+  const active=myOrders.filter(o=>!['done','cancelled'].includes(o.status)).length;
+  document.getElementById('home-orders-count').textContent=myOrders.length? (active+' '+T('active_n')) : T('empty_orders');
+  const hb=document.getElementById('home-orders-badge');
+  if(active){ hb.style.display=''; hb.textContent=active; } else hb.style.display='none';
+  document.getElementById('home-veh-count').textContent=(u.vehicles||[]).length+' 🚛';
+  document.getElementById('pf-name').textContent=name;
+  document.getElementById('pf-phone').textContent=u.phone;
+  document.getElementById('pf-avatar').textContent=(u.firstName[0]||'B').toUpperCase();
+  renderServices(); renderOrders(); renderVehicles(); renderTx();
 }
-
-
-/* =========================
-   HOME
-========================= */
-
-function renderHome(){
-
-  const user=currentUser();
-
-  if(!user){
-
-    go('s-login');
-
-    return;
-  }
-
-  document.getElementById('home-name').textContent=
-    user.firstName || 'Клиент';
-
-  document.getElementById('home-balance').textContent=
-    Number(user.balance || 0).toLocaleString('ru-RU') +
-    ' ₸';
-
-  document.getElementById('home-phone').textContent=
-    user.phone || '—';
-
-  const vehicle=
-    user.vehicles &&
-    user.vehicles.length
-      ? user.vehicles[0]
-      : null;
-
-  document.getElementById('home-car').textContent=
-    vehicle
-      ? ((vehicle.brand || '')+' '+(vehicle.model || '')).trim()
-      : '—';
-
-  document.getElementById('home-plate').textContent=
-    vehicle && vehicle.plate
-      ? vehicle.plate
-      : '—';
-}
-
-
-/* =========================
-   PROFILE
-========================= */
-
-function renderProfile(){
-
-  const user=currentUser();
-
-  if(!user){
-
-    go('s-login');
-
-    return;
-  }
-
-  document.getElementById('pr-first-name').value=
-    user.firstName || '';
-
-  document.getElementById('pr-last-name').value=
-    user.lastName || '';
-
-  document.getElementById('pr-iin').value=
-    user.iin || '';
-
-  document.getElementById('pr-phone').value=
-    user.phone || '';
-
-  document.getElementById('pr-email').value=
-    user.email || '';
-}
-
-
-function saveProfile(){
-
-  const user=currentUser();
-
-  if(!user){
-
-    go('s-login');
-
-    return;
-  }
-
-  user.firstName=
-    document.getElementById('pr-first-name').value.trim();
-
-  user.lastName=
-    document.getElementById('pr-last-name').value.trim();
-
-  user.iin=
-    document.getElementById('pr-iin').value.trim();
-
-  user.email=
-    document.getElementById('pr-email').value.trim();
-
-  updateUser(user);
-
-  toast('Профиль сохранён');
-
-  go('s-home');
-}
-
-
-/* =========================
-   VEHICLES
-========================= */
-
-function renderVehicles(){
-
-  const user=currentUser();
-
-  if(!user){
-
-    go('s-login');
-
-    return;
-  }
-
-  const box=document.getElementById('vehicles-list');
-
-  const vehicles=
-    Array.isArray(user.vehicles)
-      ? user.vehicles
-      : [];
-
-  if(!vehicles.length){
-
-    box.innerHTML=
-      '<p class="muted">Машин пока нет.</p>';
-
-    return;
-  }
-
-  box.innerHTML=
-    vehicles.map((v,i)=>`
-
-      <div class="vehicle">
-
-        <h3>
-          ${(v.brand || '')}
-          ${(v.model || '')}
-        </h3>
-
-        <p>
-          <strong>Номер:</strong>
-          ${v.plate || '—'}
-        </p>
-
-        <p style="margin-top:6px;">
-          <strong>VIN:</strong>
-          ${v.vin || '—'}
-        </p>
-
-        <button
-          class="btn btn-danger"
-          style="margin-top:12px;"
-          onclick="removeVehicle(${i})"
-        >
-          Удалить
-        </button>
-
-      </div>
-
-    `).join('');
-}
-
-
-function addVehicle(){
-
-  const user=currentUser();
-
-  if(!user){
-
-    go('s-login');
-
-    return;
-  }
-
-  const brand=
-    document.getElementById('av-brand').value.trim();
-
-  const model=
-    document.getElementById('av-model').value.trim();
-
-  const plate=
-    document.getElementById('av-plate').value.trim();
-
-  const vin=
-    document.getElementById('av-vin').value.trim();
-
-  if(!brand || !model || !plate || !vin){
-
-    toast('Заполните все поля');
-
-    return;
-  }
-
-  if(!Array.isArray(user.vehicles)){
-    user.vehicles=[];
-  }
-
-  user.vehicles.push({
-    brand:brand,
-    model:model,
-    plate:plate,
-    vin:vin,
-    trailers:[]
+function svcName(sv){ return sv.name[LANG]||sv.name.ru; }
+function svcDesc(sv){ return sv.desc[LANG]||sv.desc.ru; }
+function renderServices(){
+  const box=document.getElementById('services-list');
+  const list=settings().services.filter(x=>x.active);
+  box.innerHTML='';
+  if(!list.length){ box.innerHTML='<div class="empty"><div class="big">📋</div>'+T('empty_orders')+'</div>'; return; }
+  list.forEach(sv=>{
+    const el=document.createElement('div'); el.className='svc';
+    el.innerHTML=`<div class="head"><div class="ic">${sv.icon}</div>
+      <div class="flex1"><div class="title">${svcName(sv)}</div>
+      <div class="muted">${svcDesc(sv)}</div></div></div>
+      <div class="row between mb8"><span class="price">${fmt(sv.price)}</span>
+      <span class="chip">⏱ ${sv.days} ${T('work_days')}</span></div>
+      <button class="btn sm" style="width:100%" onclick="openOrder('${sv.id}')">${T('order_btn')}</button>`;
+    box.appendChild(el);
   });
-
-  updateUser(user);
-
-  document.getElementById('av-brand').value='';
-  document.getElementById('av-model').value='';
-  document.getElementById('av-plate').value='';
-  document.getElementById('av-vin').value='';
-
-  toast('Машина добавлена');
-
-  go('s-vehicles');
 }
-
-
-function removeVehicle(index){
-
-  const user=currentUser();
-
-  if(!user || !Array.isArray(user.vehicles)){
-    return;
-  }
-
-  const ok=
-    confirm('Удалить эту машину?');
-
-  if(!ok){
-    return;
-  }
-
-  user.vehicles.splice(index,1);
-
-  updateUser(user);
-
-  renderVehicles();
-
-  toast('Машина удалена');
+/* ORDER */
+let currentSvc=null;
+function openOrder(id){
+  const u=currentUser(); if(!u) return;
+  if(!(u.vehicles||[]).length){ toast(T('empty_vehicles')); go('s-vehicles'); return; }
+  currentSvc=settings().services.find(x=>x.id===id);
+  if(!currentSvc) return;
+  document.getElementById('order-info').innerHTML=`
+    <div class="row"><div class="svc" style="margin:0;box-shadow:none;padding:0"><div class="head" style="margin:0"><div class="ic">${currentSvc.icon}</div>
+    <div class="flex1"><div class="title">${svcName(currentSvc)}</div><div class="muted">${svcDesc(currentSvc)}</div></div></div></div></div>
+    <div class="divider"></div>
+    <div class="row between"><span class="chip">⏱ ${currentSvc.days} ${T('work_days')}</span><span class="price">${fmt(currentSvc.price)}</span></div>
+    <div class="muted mt8" style="font-size:12px">ℹ️ ${T('workdays_calc')}</div>`;
+  fillOrderVehicles();
+  updateOrderCalc();
+  go('s-order');
 }
-
-
-/* =========================
-   ORDERS
-========================= */
-
+function fillOrderVehicles(){
+  const u=currentUser();
+  const vs=document.getElementById('order-vehicle'); vs.innerHTML='';
+  (u.vehicles||[]).forEach((v,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=`${v.brand} ${v.model} • ${v.plate}`; vs.appendChild(o); });
+  fillTrailers();
+}
+function fillTrailers(){
+  const u=currentUser();
+  const vi=parseInt(document.getElementById('order-vehicle').value||'0');
+  const v=(u.vehicles||[])[vi];
+  const ts=document.getElementById('order-trailer'); ts.innerHTML='';
+  const o0=document.createElement('option'); o0.value='-1'; o0.textContent=T('no_trailer'); ts.appendChild(o0);
+  (v&&v.trailers||[]).forEach((t,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=`${t.brand} • ${t.plate}`; ts.appendChild(o); });
+}
+function updateOrderCalc(){
+  const u=currentUser(); if(!u||!currentSvc) return;
+  const after=u.balance-currentSvc.price;
+  const enough=after>=0;
+  document.getElementById('order-calc').innerHTML=`
+    <div class="kv"><span class="k">${T('cost')}</span><span class="v">${fmt(currentSvc.price)}</span></div>
+    <div class="kv"><span class="k">${T('your_balance')}</span><span class="v">${fmt(u.balance)}</span></div>
+    <div class="kv"><span class="k">${T('after_order')}</span><span class="v" style="color:${enough?'var(--green)':'var(--red)'}">${fmt(after)}</span></div>`;
+  const btn=document.getElementById('order-pay');
+  if(enough){ btn.textContent=T('confirm_order'); btn.className='btn'; btn.onclick=confirmOrder; }
+  else{ btn.textContent=T('insufficient')+' → '+T('go_topup'); btn.className='btn red'; btn.onclick=()=>go('s-topup'); }
+}
+function confirmOrder(){
+  const u=currentUser(); if(!u||!currentSvc) return;
+  if(u.balance<currentSvc.price){ go('s-topup'); return; }
+  u.balance-=currentSvc.price;
+  updateUser(u);
+  const vi=parseInt(document.getElementById('order-vehicle').value||'0');
+  const ti=parseInt(document.getElementById('order-trailer').value||'-1');
+  const v=(u.vehicles||[])[vi]||{};
+  const t=ti>=0?((v.trailers||[])[ti]):null;
+  const num='BYI-'+(1000+orders().length+1);
+  const now=new Date().toISOString();
+  const ord={
+    num, userPhone:u.phone, userName:u.firstName+' '+(u.lastName||''),
+    svcId:currentSvc.id, svcIcon:currentSvc.icon, svcName:currentSvc.name,
+    vehicle:v.brand+' '+v.model+' • '+v.plate,
+    trailer:t? (t.brand+' • '+t.plate):null,
+    price:currentSvc.price, days:currentSvc.days,
+    comment:document.getElementById('order-comment').value.trim(),
+    status:'accepted', created:now,
+    history:[{status:'new',date:now},{status:'accepted',date:now}]
+  };
+  const os=orders(); os.unshift(ord); saveOrders(os);
+  const ts=txs(); ts.unshift({type:'pay',amount:-ord.price,date:now,id:num,svc:svcName(currentSvc),userPhone:u.phone}); saveTxs(ts);
+  document.getElementById('order-comment').value='';
+  document.getElementById('os-status').textContent='🔵 '+T('st_accepted');
+  document.getElementById('os-info').innerHTML=`
+    <div class="kv"><span class="k">${T('my_orders')}</span><span class="v">${num}</span></div>
+    <div class="kv"><span class="k">${T('service')}</span><span class="v">${currentSvc.icon} ${svcName(currentSvc)}</span></div>
+    <div class="kv"><span class="k">${T('vehicle')}</span><span class="v">${ord.vehicle}</span></div>
+    ${ord.trailer?`<div class="kv"><span class="k">${T('trailer')}</span><span class="v">${ord.trailer}</span></div>`:''}
+    <div class="kv"><span class="k">${T('price')}</span><span class="v">${fmt(ord.price)}</span></div>
+    <div class="kv"><span class="k">${T('expected')}</span><span class="v">${T('until')} ${deadlineText(now,ord.days)}</span></div>`;
+  toast(T('order_created'));
+  go('s-order-success');
+}
+/* ORDERS */
+let ordF='all';
+function ordFilter(f,btn){ ordF=f; document.querySelectorAll('#orders-tabs button').forEach(b=>b.classList.toggle('on',b===btn)); renderOrders(); }
+function stBadge(st){ return `<span class="badge st-${st}">${T('st_'+st)}</span>`; }
 function renderOrders(){
-
-  const user=currentUser();
-
-  if(!user){
-
-    go('s-login');
-
-    return;
-  }
-
-  const allOrders=
-    DB.get('byi2_orders',[]);
-
-  const orders=
-    allOrders.filter(
-      x=>x.phone===user.phone
-    );
-
-  const box=
-    document.getElementById('orders-list');
-
-  if(!orders.length){
-
-    box.innerHTML=
-      '<p class="muted">Заказов пока нет.</p>';
-
-    return;
-  }
-
-  box.innerHTML=
-    orders.map(order=>`
-
-      <div class="vehicle">
-
-        <h3>
-          ${order.service || 'Заказ'}
-        </h3>
-
-        <p>
-          Статус:
-          <span class="badge">
-            ${order.status || 'Новый'}
-          </span>
-        </p>
-
-        <p style="margin-top:8px;">
-          Сумма:
-          ${Number(order.amount || 0).toLocaleString('ru-RU')} ₸
-        </p>
-
-      </div>
-
-    `).join('');
+  const u=currentUser(); if(!u) return;
+  const box=document.getElementById('orders-list');
+  let list=orders().filter(o=>o.userPhone===u.phone);
+  if(ordF==='active') list=list.filter(o=>!['done','cancelled'].includes(o.status));
+  else if(ordF!=='all') list=list.filter(o=>o.status===ordF);
+  box.innerHTML='';
+  if(!list.length){ box.innerHTML=`<div class="empty"><div class="big">🗂</div>${T('empty_orders')}<button class="btn sm mt16" onclick="go('s-services')">${T('order_btn')}</button></div>`; return; }
+  list.forEach(o=>{
+    const el=document.createElement('div'); el.className='list-item';
+    el.innerHTML=`<div class="row between"><b>${o.num}</b>${stBadge(o.status)}</div>
+      <div class="muted mt8">${o.svcIcon||'📄'} ${o.svcName[LANG]||o.svcName.ru} • ${o.vehicle}</div>
+      <div class="row between mt8"><span class="muted">${fmtDate(o.created)}</span><b>${fmt(o.price)}</b></div>`;
+    el.onclick=()=>openOrderDetail(o.num);
+    box.appendChild(el);
+  });
 }
-
-
-/* =========================
-   PAYMENTS
-========================= */
-
-function renderPayments(){
-
-  const user=currentUser();
-
-  if(!user){
-
-    go('s-login');
-
-    return;
-  }
-
-  const all=
-    DB.get('byi2_payments',[]);
-
-  const payments=
-    all.filter(
-      x=>x.phone===user.phone
-    );
-
-  const box=
-    document.getElementById('payments-list');
-
-  if(!payments.length){
-
-    box.innerHTML=
-      '<p class="muted">История платежей пока пуста.</p>';
-
-    return;
-  }
-
-  box.innerHTML=
-    payments.map(p=>`
-
-      <div class="vehicle">
-
-        <p>
-          <strong>Сумма:</strong>
-          ${Number(p.amount || 0).toLocaleString('ru-RU')} ₸
-        </p>
-
-        <p style="margin-top:8px;">
-          <strong>Дата:</strong>
-          ${p.date || '—'}
-        </p>
-
-      </div>
-
-    `).join('');
+function openOrderDetail(num){
+  const o=orders().find(x=>x.num===num); if(!o) return;
+  document.getElementById('od-num').textContent=o.num;
+  document.getElementById('od-info').innerHTML=`
+    <div class="row between mb8"><b style="font-size:16px">${o.svcIcon||'📄'} ${o.svcName[LANG]||o.svcName.ru}</b>${stBadge(o.status)}</div>
+    <div class="kv"><span class="k">${T('vehicle')}</span><span class="v">${o.vehicle}</span></div>
+    ${o.trailer?`<div class="kv"><span class="k">${T('trailer')}</span><span class="v">${o.trailer}</span></div>`:''}
+    <div class="kv"><span class="k">${T('price')}</span><span class="v">${fmt(o.price)}</span></div>
+    <div class="kv"><span class="k">${T('created')}</span><span class="v">${fmtDate(o.created)}</span></div>
+    <div class="kv"><span class="k">${T('expected')}</span><span class="v">${T('until')} ${deadlineText(o.created,o.days)}</span></div>
+    ${o.comment?`<div class="kv"><span class="k">${T('comment')}</span><span class="v">${o.comment}</span></div>`:''}`;
+  const tl=document.getElementById('od-timeline'); tl.innerHTML='';
+  (o.history||[]).slice().reverse().forEach((h,i,arr)=>{
+    const st=document.createElement('div');
+    st.className='tstep '+(i===0?'now':'done');
+    st.innerHTML=`<div class="dot"></div><div><div class="tt">${T('st_'+h.status)}</div><div class="ts">${fmtDateTime(h.date)}</div></div>`;
+    tl.appendChild(st);
+  });
+  go('s-order-detail');
 }
+/* VEHICLES */
+function renderVehicles(){
+  const u=currentUser(); if(!u) return;
+  const box=document.getElementById('vehicles-list'); box.innerHTML='';
+  if(!(u.vehicles||[]).length){ box.innerHTML=`<div class="empty"><div class="big">🚛</div>${T('empty_vehicles')}</div>`; return; }
+  u.vehicles.forEach((v,i)=>{
+    const el=document.createElement('div'); el.className='card';
+    let trHtml='';
+    (v.trailers||[]).forEach(t=>{ trHtml+=`<div class="muted" style="font-size:13px">🚚 ${t.brand} • ${t.plate}</div>`; });
+    el.innerHTML=`<div class="row between"><div class="title">🚛 ${v.brand} ${v.model}</div>
+      <a class="link" style="color:var(--red)" onclick="delVehicle(${i})">✕</a></div>
+      <div class="muted mt8" style="font-weight:700;color:var(--text)">${v.plate}</div>
+      ${v.vin?`<div class="muted" style="font-size:12.5px">VIN: ${v.vin}</div>`:''}
+      ${trHtml?'<div class="mt8">'+trHtml+'</div>':''}`;
+    box.appendChild(el);
+  });
+}
+let vhHasTrailer=false;
+function openVehicleSheet(){ vhHasTrailer=false;
+  document.getElementById('vh-tr-yes').classList.remove('on');
+  document.getElementById('vh-tr-no').classList.add('on');
+  document.getElementById('vh-trailer-fields').classList.add('hidden');
+  ['vh-brand','vh-model','vh-plate','vh-vin','vh-tr-brand','vh-tr-plate'].forEach(id=>document.getElementById(id).value='');
+  openSheet('sheet-vehicle');
+}
+function vhTrailerChoice(v){ vhHasTrailer=v;
+  document.getElementById('vh-tr-yes').classList.toggle('on',v);
+  document.getElementById('vh-tr-no').classList.toggle('on',!v);
+  document.getElementById('vh-trailer-fields').classList.toggle('hidden',!v);
+}
+function saveVehicle(){
+  const u=currentUser(); if(!u) return;
+  const gv=id=>document.getElementById(id).value.trim();
+  const v={brand:gv('vh-brand'),model:gv('vh-model'),plate:gv('vh-plate'),vin:gv('vh-vin'),trailers:[]};
+  if(!v.brand||!v.plate){ toast(T('err_fill')); return; }
+  if(vhHasTrailer){
+    if(!gv('vh-tr-brand')||!gv('vh-tr-plate')){ toast(T('err_fill')); return; }
+    v.trailers.push({type:parseInt(document.getElementById('vh-tr-type').value||'0'),brand:gv('vh-tr-brand'),plate:gv('vh-tr-plate')});
+  }
+  u.vehicles=u.vehicles||[]; u.vehicles.push(v);
+  updateUser(u); closeSheets(); renderVehicles(); renderAll(); toast(T('saved'));
+}
+function delVehicle(i){
+  askConfirm(T('my_vehicles'),T('confirm_del_vehicle'),()=>{
+    const u=currentUser(); u.vehicles.splice(i,1); updateUser(u); renderVehicles(); renderAll(); toast(T('saved'));
+  });
+}
+/* TRANSACTIONS */
+function renderTx(){
+  const u=currentUser(); if(!u) return;
+  const box=document.getElementById('tx-list'); box.innerHTML='';
+  const list=txs().filter(t=>t.userPhone===u.phone);
+  if(!list.length){ box.innerHTML=`<div class="empty"><div class="big">💳</div>${T('empty_history')}</div>`; return; }
+  list.forEach(t=>{
+    const el=document.createElement('div'); el.className='list-item'; el.style.cursor='default';
+    const pos=t.amount>0;
+    el.innerHTML=`<div class="row between">
+      <div><b style="font-size:14.5px">${pos?T('op_topup'):(t.svc||T('op_payment'))}</b><div class="muted">${fmtDateTime(t.date)} • ${t.id}</div></div>
+      <b style="color:${pos?'var(--green)':'var(--red)'};font-size:16px">${pos?'+':''}${fmt(t.amount).replace(' ₸','')} ₸</b></div>`;
+    box.appendChild(el);
+  });
+}
+/* TOPUP */
+let topupAmt=0;
+function setAmt(v,btn){
+  document.querySelectorAll('#amounts button').forEach(b=>b.classList.toggle('on',b===btn));
+  topupAmt=v;
+  document.getElementById('custom-amt').classList.toggle('hidden', v!==0);
+  if(v>0) document.getElementById('rc-amount').value=v;
+}
+function copyKaspi(){ navigator.clipboard.writeText(settings().kaspiPhone).then(()=>toast(T('copied'))).catch(()=>toast(settings().kaspiPhone)); }
+function openKaspi(){ window.open('https://kaspi.kz','_blank'); }
+function paidKaspi(){
+  let amt=topupAmt;
+  if(amt===0) amt=parseInt(document.getElementById('amt-input').value||'0');
+  if(!amt||amt<100){ toast(T('err_amount')); return; }
+  document.getElementById('rc-amount').value=amt;
+  document.getElementById('receipt-box').classList.remove('hidden');
+  document.getElementById('receipt-box').scrollIntoView({behavior:'smooth'});
+}
+function sendReceipt(){
+  const u=currentUser(); if(!u) return;
+  const amt=parseInt(document.getElementById('rc-amount').value||'0');
+  if(!amt||amt<100){ toast(T('err_amount')); return; }
+  const f=document.getElementById('rc-file').files[0];
+  const p=payments();
+  const pay={id:'PAY-'+(1000+p.length+1),userPhone:u.phone,userName:u.firstName+' '+(u.lastName||''),
+    amount:amt,comment:document.getElementById('rc-comment').value.trim(),
+    receiptName:f?f.name:null,status:'pending',created:new Date().toISOString()};
+  p.unshift(pay); savePayments(p);
+  document.getElementById('receipt-box').classList.add('hidden');
+  document.getElementById('tp-info').innerHTML=`
+    <div class="kv"><span class="k">ID</span><span class="v">${pay.id}</span></div>
+    <div class="kv"><span class="k">${T('your_amount')}</span><span class="v">${fmt(amt)}</span></div>
+    <div class="kv"><span class="k">${T('status')}</span><span class="v"><span class="badge st-pending">🟡 ${T('wait_confirm')}</span></span></div>`;
+  toast(T('topup_sent'));
+  go('s-topup-pending');
+}
+/* PROFILE */
+function openEditProfile(){
+  const u=currentUser(); if(!u) return;
+  document.getElementById('ep-fname').value=u.firstName||'';
+  document.getElementById('ep-lname').value=u.lastName||'';
+  document.getElementById('ep-email').value=u.email||'';
+  document.getElementById('ep-iin').value=u.iin||'';
+  document.getElementById('ep-phone').value=u.phone||'';
+  openSheet('sheet-profile');
+}
+function saveProfile(){
+  const u=currentUser(); if(!u) return;
+  u.firstName=document.getElementById('ep-fname').value.trim()||u.firstName;
+  u.lastName=document.getElementById('ep-lname').value.trim();
+  u.email=document.getElementById('ep-email').value.trim();
+  updateUser(u); closeSheets(); renderAll(); toast(T('saved'));
+}
+function openPassSheet(){ document.getElementById('cp-old').value=''; document.getElementById('cp-new').value=''; openSheet('sheet-pass'); }
+function savePass(){
+  const u=currentUser(); if(!u) return;
+  if(document.getElementById('cp-old').value!==u.password){ toast(T('err_old_pass')); return; }
+  const n=document.getElementById('cp-new').value;
+  if(n.length<4){ toast(T('err_fill')); return; }
+  u.password=n; updateUser(u); closeSheets(); toast(T('pass_changed'));
+}
+function togglePfLangs(){ document.getElementById('pf-langs').classList.toggle('hidden'); }
 
-
-/* =========================
-   START
-========================= */
-
-document.addEventListener(
-  'DOMContentLoaded',
-  ()=>{
-    const user=currentUser();
-
-    if(user){
-
-      go('s-home');
-
-    }else{
-
-      go('s-login');
-
+/* ==================== INIT ==================== */
+window.addEventListener('load',()=>{
+  applyLang();
+  setTimeout(()=>{
+    document.getElementById('splash').classList.add('hide');
+    if(!localStorage.getItem('byi2_ob')){
+      document.getElementById('onboarding').classList.add('show');
+      obTab(/iPhone|iPad|iPod/.test(navigator.userAgent)?'ios':'and');
     }
-  }
-);
+    if(currentUser()) go('s-home'); else go('s-welcome');
+  },1100);
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+});
 </script>
-
 </body>
 </html>
