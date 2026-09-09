@@ -172,6 +172,29 @@ h2{font-size:17px;font-weight:700;margin-bottom:12px}
 @media(min-width:481px){.bnav{border-radius:20px 20px 0 0}}
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="telegram.js"></script>
+<style id="byi-responsive-v2">
+@media (min-width:481px){
+  body{background:#eef2f7}
+  .app{max-width:1200px;min-height:100vh;box-shadow:0 0 50px rgba(15,42,92,.12)}
+  .screen{padding:28px 34px 40px}
+  .menu-grid{grid-template-columns:repeat(4,minmax(150px,1fr));gap:16px}
+  .svc,.card,.list-item{max-width:none}
+  .bnav{position:sticky;top:0;bottom:auto;left:auto;transform:none;max-width:1200px;border-top:0;border-bottom:1px solid var(--line);border-radius:0;order:-1}
+  .bnav a{padding:13px 8px;font-size:12px}
+  .bnav .ic{font-size:18px;display:inline;margin-right:5px}
+}
+@media (min-width:769px){
+  .screen{padding-left:56px;padding-right:56px}
+  .menu-grid{grid-template-columns:repeat(4,1fr)}
+  .svc{display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:12px}
+}
+@media (min-width:1100px){
+  .app{max-width:1400px}
+  .screen{padding-left:72px;padding-right:72px}
+  .menu-grid{grid-template-columns:repeat(4,1fr)}
+}
+</style>
 </head>
 <body>
 
