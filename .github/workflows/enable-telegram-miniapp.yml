@@ -63,12 +63,20 @@ jobs:
           if 'window.BYI_TELEGRAM' not in s:
               s=s.replace('</body>',init+'\n</body>',1); changed=True
           if changed: p.write_text(s,encoding='utf-8')
+
+          a=Path('admin.html')
+          if a.exists():
+              s=a.read_text(encoding='utf-8')
+              tag='<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>'
+              if 'cdn.jsdelivr.net/npm/@supabase/supabase-js@2' not in s:
+                  s=s.replace('</head>',tag+'\n</head>',1)
+                  a.write_text(s,encoding='utf-8')
           PY
 
       - name: Commit patched client
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git diff --cached --quiet || git commit -m "Improve Telegram Mini App responsive layout"
+          git add index.html admin.html .github/workflows/enable-telegram-miniapp.yml
+          git diff --cached --quiet || git commit -m "Fix admin Supabase dependency"
           git push
